@@ -15,12 +15,12 @@ void setup() {
 }
 
 void draw() {
-  background(56,242,35);
+  background(0,0,0);
   lights();
   translate(width/2, height/2, 0);
   rotateX(rotateX);
   rotateY(rotateY);
-  rotateZ(rotateZ);
+  //rotateZ(rotateZ);
   box(400, 5, 400);
 }
 
@@ -44,7 +44,7 @@ void mouseDragged(){
   
   if (rotateZ > PI/3){
      rotateZ = PI/3; 
-  } else if (rotateZ < -PI/3){
+  } else if (rotateY < -PI/3){
      rotateZ = -PI/3; 
   }
   prevMouseY = mouseY;
