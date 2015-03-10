@@ -54,9 +54,15 @@ void mouseDragged(){
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
   if (e < 0) {
-     movMagnitude = movMagnitude * 1.2; 
+     movMagnitude = movMagnitude * 1.5; 
   } else if (e > 0) {
-     movMagnitude = movMagnitude / 1.2; 
+     movMagnitude = movMagnitude / 1.5; 
+  }
+  
+  if (movMagnitude < 0.01) {
+    movMagnitude = 0.01;
+  } else if (movMagnitude > 0.2){
+    movMagnitude = 0.2; 
   }
 }
 
