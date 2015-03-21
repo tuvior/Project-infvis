@@ -4,25 +4,30 @@ import java.util.ArrayList;
 MovingBall ball;
 
 public ArrayList < Cylinder > cylinders;
-float rotateY = 0;
-float rotateX = 0;
-float rotateZ = 0;
-float movMagnitude = 0.02f;
-float prevMouseX;
-float prevMouseY;
+private float rotateY = 0;
+private float rotateX = 0;
+private float rotateZ = 0;
+private float prevMouseX;
+private float prevMouseY;
 
-boolean birdView = false;
-float boundX1;
-float boundX2;
-float boundZ1;
-float boundZ2;
+private boolean birdView = false;
+private float boundX1;
+private float boundX2;
+private float boundZ1;
+private float boundZ2;
 
+private final float boardSize = 400;
+private final float boardHeight = 5;
 
-float boardSize = 400;
+private float movMagnitude = 0.02f;
+
+private final float speedCoeff = 1.5;
+private final float speedLowLimit = 0.01;
+private final float speedUpperLimit = 0.1;
 
 
 public void setup() {
-  size(800, 800, P3D);
+  size(500, 500, P3D);
   ball = new MovingBall(this);
   boundX1 = width / 2 - boardSize / 2;
   boundX2 = width / 2 + boardSize / 2;
@@ -47,6 +52,19 @@ public void draw() {
     textSize(25);
     text("SHIFT", boardSize / 2 + 20, boardSize / 2 - 20, 0);
     rotateX(-PI / 2);
+    
+    // Cylinder Preview
+    if (cylinderCheckBoard() && cylinderCheckBall() ){
+       fill(0, 0, 255);
+    }
+    else{
+       fill(255, 0, 0);
+    }
+    Cylinder cylinderPrev = new Cylinder(mouseX - width / 2, mouseY - width / 2, this);    
+    cylinderPrev.display();
+
+    
+      
   } else {
     //normal view
     rotateY(rotateY);
@@ -57,7 +75,7 @@ public void draw() {
     ball.checkCylinderCollision();
   }
   fill(0, 255, 0);
-  box(boardSize, 5, boardSize);
+  box(boardSize, boardHeight, boardSize);
   ball.display();
 
   fill(0, 0, 255);
@@ -66,20 +84,21 @@ public void draw() {
   }
 }
 
+
 @Override
 public void mouseClicked() {
   if (birdView) {
     //don't place cylinders outside of the board
-    if (mouseX >= boundX1 + Cylinder.radius && mouseX <= boundX2 - Cylinder.radius && mouseY >= boundZ1 + Cylinder.radius && mouseY <= boundZ2 - Cylinder.radius) {
-      PVector mouse = new PVector(mouseX - 400, -22.5f, mouseY - 400);
-
+    if (cylinderCheckBoard()) {
+      
       //don't place cylinders on the ball
-      if (mouse.dist(ball.location) >= 35) {
-        cylinders.add(new Cylinder(mouse.x, mouse.z, this));
+      if (cylinderCheckBall()) {
+        cylinders.add(new Cylinder(mouseX- width / 2, mouseY- width / 2, this));
       }
     }
   }
 }
+
 
 public void mouseDragged() {
   //don't rotate if in birdview
@@ -112,18 +131,19 @@ public void mouseDragged() {
   prevMouseX = mouseX;
 }
 
+
 public void mouseWheelMoved(MouseWheelEvent e) {
   float w = e.getWheelRotation();
   if (w < 0) {
-    movMagnitude = movMagnitude * 1.5f;
+    movMagnitude = movMagnitude * speedCoeff;
   } else if (w > 0) {
-    movMagnitude = movMagnitude / 1.5f;
+    movMagnitude = movMagnitude / speedCoeff;
   }
 
-  if (movMagnitude < 0.01f) {
-    movMagnitude = 0.01f;
-  } else if (movMagnitude > 0.1f) {
-    movMagnitude = 0.1f;
+  if (movMagnitude < speedLowLimit) {
+    movMagnitude = speedLowLimit;
+  } else if (movMagnitude > speedUpperLimit) {
+    movMagnitude = speedUpperLimit;
   }
 }
 
@@ -146,4 +166,13 @@ public void keyPressed() {
       birdView = true;
     }
   }
+}
+
+public boolean cylinderCheckBoard(){
+  return (mouseX >= boundX1 + Cylinder.radius && mouseX <= boundX2 - Cylinder.radius && mouseY >= boundZ1 + Cylinder.radius && mouseY <= boundZ2 - Cylinder.radius);
+}
+
+public boolean cylinderCheckBall(){
+  PVector mouse = new PVector(mouseX - width / 2, -22.5f, mouseY - width / 2);
+  return (mouse.dist(ball.location) >= Cylinder.radius + MovingBall.radius); 
 }

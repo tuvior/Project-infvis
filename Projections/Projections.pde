@@ -29,8 +29,8 @@ void draw() {
 
 
 class My2DPoint {
-  float x;
-  float y;
+  private final float x;
+  private final float y;
   My2DPoint(float x, float y) {
     this.x = x;
     this.y = y;
@@ -38,9 +38,9 @@ class My2DPoint {
 }
 
 class My3DPoint {
-  float x;
-  float y;
-  float z;
+  private final float x;
+  private final float y;
+  private final float z;
   My3DPoint(float x, float y, float z) {
     this.x = x;
     this.y = y;
@@ -57,7 +57,7 @@ My2DPoint projectPoint(My3DPoint eye, My3DPoint p) {
 
 
 class My2DBox {
-  My2DPoint[] s; // the size muste be 8
+  private final My2DPoint[] s; // the size muste be 8
   My2DBox(My2DPoint[] s) {
     this.s = s;
   }
@@ -95,7 +95,7 @@ class My2DBox {
 
 
 class My3DBox {
-  My3DPoint[] p; //size of 8
+  private final My3DPoint[] p; //size of 8
   My3DBox(My3DPoint origin, float dimX, float dimY, float dimZ){
     float x = origin.x;
     float y = origin.y;
@@ -117,7 +117,7 @@ class My3DBox {
 
 
 My2DBox projectBox (My3DPoint eye, My3DBox box) {
-  My2DPoint[] array = new My2DPoint[]{ projectPoint(eye,box.p[0]),
+   My2DPoint[] array = new My2DPoint[]{ projectPoint(eye,box.p[0]),
                                        projectPoint(eye,box.p[1]),
                                        projectPoint(eye,box.p[2]),
                                        projectPoint(eye,box.p[3]),

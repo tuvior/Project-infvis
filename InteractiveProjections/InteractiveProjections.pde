@@ -2,13 +2,15 @@ void setup() {
   size(600, 600, P3D);
 }
 
-float x = 1.0;
-float y = 1.0;
-float z = 1.0;
+private float x = 1.0;
+private float y = 1.0;
+private float z = 1.0;
 
-float tx = 0;
-float ty = 0;
-float tz = 0;
+private float tx = 0;
+private float ty = 0;
+private float tz = 0;
+
+private final float delta = 0.1;
 
 void draw() {
   background(255, 255, 255);
@@ -32,8 +34,9 @@ void draw() {
 
 
 class My2DPoint {
-  float x;
-  float y;
+  private final float x;
+  private final float y;
+  
   My2DPoint(float x, float y) {
     this.x = x;
     this.y = y;
@@ -41,9 +44,10 @@ class My2DPoint {
 }
 
 class My3DPoint {
-  float x;
-  float y;
-  float z;
+  private final float x;
+  private final float y;
+  private final float z;
+  
   My3DPoint(float x, float y, float z) {
     this.x = x;
     this.y = y;
@@ -60,10 +64,12 @@ My2DPoint projectPoint(My3DPoint eye, My3DPoint p) {
 
 
 class My2DBox {
-  My2DPoint[] s; // the size muste be 8
+  private final My2DPoint[] s; // the size muste be 8
+  
   My2DBox(My2DPoint[] s) {
     this.s = s;
   }
+  
   void render(){
     
     line(s[0].x, s[0].y, s[3].x, s[3].y);
@@ -98,7 +104,8 @@ class My2DBox {
 
 
 class My3DBox {
-  My3DPoint[] p; //size of 8
+  private final My3DPoint[] p; //size of 8
+  
   My3DBox(My3DPoint origin, float dimX, float dimY, float dimZ){
     float x = origin.x;
     float y = origin.y;
@@ -113,6 +120,7 @@ class My3DBox {
                              new My3DPoint(x+dimX,y+dimY,z)
     };
   }
+  
   My3DBox(My3DPoint[] p) {
     this.p = p;
   }
@@ -220,13 +228,13 @@ void mouseDragged(){
 void keyPressed(){
   if (key == CODED) {
      if (keyCode == UP){
-         tx = tx + 0.1;
+         tx = tx + delta;
      } else if (keyCode == DOWN){
-         tx = tx - 0.1;
+         tx = tx - delta;
      } else if (keyCode == LEFT){
-         ty = ty + 0.1;
+         ty = ty + delta;
      } else if (keyCode == RIGHT){
-         ty = ty - 0.1;
+         ty = ty - delta;
      }
   } 
 }

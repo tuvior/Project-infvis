@@ -1,10 +1,19 @@
 public class MovingBall {
 
     private Game parent;
-    public PVector location;
+    private PVector location;
     private PVector velocity;
+    public final static float radius = 20;
+    
     private PVector gravityForce = new PVector(0, 0, 0);
-    final float gravityConstant = 0.1f;
+    private final float gravityConstant = 0.1f;
+    
+    private final float normalForce = 1;
+    private final float mu = 0.01f;
+    private final float frictionMagnitude = normalForce * mu;
+    private PVector friction;
+
+
 
     public MovingBall(Game parent) {
         location = new PVector(0, -22.5f, 0);
@@ -22,10 +31,8 @@ public class MovingBall {
         gravityForce.x = PApplet.sin(rotZ) * gravityConstant;
         gravityForce.z = -PApplet.sin(rotX) * gravityConstant;
 
-        float normalForce = 1;
-        float mu = 0.01f;
-        float frictionMagnitude = normalForce * mu;
-        PVector friction = velocity.get();
+        
+        friction = velocity.get();
         friction.mult(-1);
         friction.normalize();
         friction.mult(frictionMagnitude);
@@ -39,7 +46,7 @@ public class MovingBall {
         parent.pushMatrix();
         parent.translate(location.x, location.y, location.z);
         parent.fill(255, 0, 0);
-        parent.sphere(20);
+        parent.sphere(radius);
         parent.popMatrix();
     }
 
