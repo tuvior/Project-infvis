@@ -27,7 +27,7 @@ private final float speedUpperLimit = 0.1;
 
 
 public void setup() {
-  size(500, 500, P3D);
+  size(800, 800, P3D);
   ball = new MovingBall(this);
   boundX1 = width / 2 - boardSize / 2;
   boundX2 = width / 2 + boardSize / 2;
