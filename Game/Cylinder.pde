@@ -2,8 +2,8 @@ public class Cylinder {
 
     private Game parent;
     public final static float radius = 15;
-    private final float cylinderHeight = 35;
-    private final int cylinderResolution = 40;
+    private static final float cylinderHeight = 35;
+    private static final int cylinderResolution = 40;
     public PVector location;
     PShape cylinder = new PShape();
     

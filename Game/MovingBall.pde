@@ -1,8 +1,8 @@
 public class MovingBall {
 
     private Game parent;
-    private PVector location;
     private PVector velocity;
+    public PVector location;
     public final static float radius = 20;
     
     private PVector gravityForce = new PVector(0, 0, 0);
