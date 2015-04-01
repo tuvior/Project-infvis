@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Game extends PApplet {
     MovingBall ball;
     public ArrayList<Cylinder> cylinders;
+    public ArrayList<Tree> trees;
     private float rotateY = 0;
     private float rotateX = 0;
     private float rotateZ = 0;
@@ -35,16 +36,16 @@ public class Game extends PApplet {
         boundZ2 = height / 2 + boardSize / 2;
         noStroke();
         noSmooth();
-        cylinders = new ArrayList<Cylinder>();
+        cylinders = new ArrayList<>();
+        trees = new ArrayList<>();
         dataPanel = new Data(width, 120, this);
     }
 
     public void draw() {
-        fill(255);
-        background(0);
+        background(9, 162, 155);
         lights();
         dataPanel.draw(0, height - 120);
-        fill(255, 255, 255);
+        fill(255);
         textSize(15);
         text("rotationX: " + degrees(rotateX) + " rotationZ: " + degrees(rotateZ) + " rotation speed: " + movMagnitude + " cylinders: " + cylinders.size(), 10, 20, 0);
         translate(width / 2, height / 2, 0);
@@ -54,13 +55,17 @@ public class Game extends PApplet {
             text("SHIFT", boardSize / 2 + 20, boardSize / 2 - 20, 0);
             rotateX(-PI / 2);
             // Cylinder Preview
-            if (cylinderCheckBoard() && cylinderCheckBall()) {
+            if (treeCheckBoard() && treeCheckBall()) {
                 fill(80, 98, 112);
+                Tree tree = new Tree(mouseX - width / 2, mouseY - width / 2, this);
+                tree.display(true);
             } else {
                 fill(255, 0, 0);
+                Tree tree = new Tree(mouseX - width / 2, mouseY - width / 2, this);
+                tree.display(false);
             }
-            Cylinder cylinderPrev = new Cylinder(mouseX - width / 2, mouseY - width / 2, this);
-            cylinderPrev.display();
+            //Cylinder cylinderPrev = new Cylinder(mouseX - width / 2, mouseY - width / 2, this);
+            //cylinderPrev.display();
         } else {
             //normal view
             rotateY(rotateY);
@@ -70,12 +75,12 @@ public class Game extends PApplet {
             ball.update(rotateX, rotateZ);
             ball.checkCylinderCollision();
         }
-        fill(133, 158, 178);
+        fill(131, 191, 17);
         box(boardSize, boardHeight, boardSize);
         ball.display();
         fill(80, 98, 112);
-        for (Cylinder cy : cylinders) {
-            cy.display();
+        for (Tree tree : trees) {
+            tree.display();
         }
     }
 
@@ -83,10 +88,11 @@ public class Game extends PApplet {
     public void mouseClicked() {
         if (birdView) {
             //don't place cylinders outside of the board
-            if (cylinderCheckBoard()) {
+            if (treeCheckBoard()) {
                 //don't place cylinders on the ball
-                if (cylinderCheckBall()) {
-                    cylinders.add(new Cylinder(mouseX - width / 2, mouseY - width / 2, this));
+                if (treeCheckBall()) {
+                    //cylinders.add(new Cylinder(mouseX - width / 2, mouseY - width / 2, this));
+                    trees.add(new Tree(mouseX - width / 2, mouseY - width / 2, this));
                 }
             }
         }
@@ -158,13 +164,13 @@ public class Game extends PApplet {
         }
     }
 
-    public boolean cylinderCheckBoard() {
-        return (mouseX >= boundX1 + Cylinder.radius && mouseX <= boundX2 - Cylinder.radius && mouseY >= boundZ1 + Cylinder.radius && mouseY <= boundZ2 - Cylinder.radius);
+    public boolean treeCheckBoard() {
+        return (mouseX >= boundX1 + Tree.radius && mouseX <= boundX2 - Tree.radius && mouseY >= boundZ1 + Tree.radius && mouseY <= boundZ2 - Tree.radius);
     }
 
-    public boolean cylinderCheckBall() {
+    public boolean treeCheckBall() {
         PVector mouse = new PVector(mouseX - width / 2, -22.5f, mouseY - width / 2);
-        return (mouse.dist(ball.location) >= Cylinder.radius + MovingBall.radius);
+        return (mouse.dist(ball.location) >= Tree.radius + MovingBall.radius);
     }
 
     static public void main(String[] args) {

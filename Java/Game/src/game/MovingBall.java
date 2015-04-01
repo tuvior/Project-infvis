@@ -49,7 +49,7 @@ public class MovingBall {
     }
 
     public void checkCylinderCollision() {
-        for (Cylinder cy : parent.cylinders) {
+        /*for (Cylinder cy : parent.cylinders) {
             float deltaX = location.x - cy.location.x;
             float deltaY = location.z - cy.location.y;
             if (PApplet.sqrt((deltaX * deltaX) + (deltaY * deltaY)) <= Cylinder.radius + 20) {
@@ -67,7 +67,29 @@ public class MovingBall {
                 location.z = cy.location.y + n.y;
                 velocity.x = v.x;
                 velocity.z = v.y;
-                parent.dataPanel.cylinderHit();
+                parent.dataPanel.treeHit();
+            }
+        }*/
+
+        for (Tree tree : parent.trees) {
+            float deltaX = location.x - tree.location.x;
+            float deltaY = location.z - tree.location.y;
+            if (PApplet.sqrt((deltaX * deltaX) + (deltaY * deltaY)) <= Tree.radius + 20) {
+                PVector n = new PVector(deltaX, deltaY);
+                n.normalize();
+                PVector v = new PVector(velocity.x, velocity.z);
+                float te = 2 * v.dot(n);
+                n.mult(te);
+                v.sub(n);
+                n = new PVector(deltaX, deltaY);
+                n.normalize();
+                n.mult(Tree.radius + 20);
+                //make sure the ball never gets inside a cylinder
+                location.x = tree.location.x + n.x;
+                location.z = tree.location.y + n.y;
+                velocity.x = v.x;
+                velocity.z = v.y;
+                parent.dataPanel.treeHit();
             }
         }
     }

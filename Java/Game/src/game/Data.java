@@ -45,19 +45,19 @@ public class Data{
 
     private void boardTopView(){
         graphics.noStroke();
-        graphics.fill(133, 158, 178);
+        graphics.fill(131, 191, 17);
         int previewSize = height - 10;
         graphics.rect(5, 5, previewSize, previewSize);
         graphics.fill(12,119,136);
-        new Color(80, 98, 112);
+        new Color(9, 162, 155);
         float ballx = parent.ball.location.x / (parent.boardSize / previewSize);
         float bally = parent.ball.location.z / (parent.boardSize / previewSize);
         graphics.ellipse(ballx + previewSize/2 + 5, bally + previewSize/2 + 5, previewSize/10, previewSize/10);
-        graphics.fill(80, 98, 112);
-        for (Cylinder cy : parent.cylinders) {
-            float cyx = cy.location.x / (parent.boardSize / previewSize);
-            float cyy = cy.location.y / (parent.boardSize / previewSize);
-            graphics.ellipse(cyx + previewSize / 2 + 5, cyy + previewSize / 2 + 5, previewSize * Cylinder.radius*2 / parent.boardSize, previewSize * Cylinder.radius*2 / parent.boardSize);
+        graphics.fill(14, 101, 7);
+        for (Tree tree : parent.trees) {
+            float treex = tree.location.x / (parent.boardSize / previewSize);
+            float treey = tree.location.y / (parent.boardSize / previewSize);
+            graphics.ellipse(treex + previewSize / 2 + 5, treey + previewSize / 2 + 5, previewSize * Tree.radius*2 / parent.boardSize, previewSize * Tree.radius*2 / parent.boardSize);
         }
         graphics.fill(210);
         graphics.rect(10 + previewSize, 5, previewSize - 10, previewSize);
@@ -70,7 +70,7 @@ public class Data{
         graphics.text(lastScore, 15 + previewSize, 105);
     }
 
-    public void cylinderHit() {
+    public void treeHit() {
         score += parent.ball.velocity.mag();
         if (score < 0) score = 0;
         lastScore = parent.ball.velocity.mag();

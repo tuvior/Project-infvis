@@ -3,8 +3,8 @@ package game;
 public class HScrollbar {
     float barWidth; //Bar's width in pixels
     float barHeight; //Bar's height in pixels
-    float xPosition; //Bar's x position in pixels
-    float yPosition; //Bar's y position in pixels
+    float xPosition; //Bar's x location in pixels
+    float yPosition; //Bar's y location in pixels
     float sliderPosition, newSliderPosition; //Position of slider
     float sliderPositionMin, sliderPositionMax; //Max and min values of slider
     boolean mouseOver; //Is the mouse over the slider?
@@ -14,8 +14,8 @@ public class HScrollbar {
     Game parent;
 
     /**
-     * @param x The x position of the top left corner of the bar in pixels
-     * @param y The y position of the top left corner of the bar in pixels
+     * @param x The x location of the top left corner of the bar in pixels
+     * @param y The y location of the top left corner of the bar in pixels
      * @param w The width of the bar in pixels
      * @param h The height of the bar in pixels
      * @brief Creates a new horizontal scrollbar
@@ -100,9 +100,9 @@ public class HScrollbar {
     }
 
     /**
-     * @return The slider position in the interval [0,1]
-     * corresponding to [leftmost position, rightmost position]
-     * @brief Gets the slider position
+     * @return The slider location in the interval [0,1]
+     * corresponding to [leftmost location, rightmost location]
+     * @brief Gets the slider location
      */
     float getPos() {
         return (sliderPosition - xPosition) / (barWidth - barHeight);

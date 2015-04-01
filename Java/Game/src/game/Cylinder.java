@@ -3,7 +3,7 @@ package game;
 import processing.core.*;
 
 public class Cylinder {
-    private Game parent;
+    protected Game parent;
     public final static float radius = 30;
     private static final float cylinderHeight = 55;
     private static final int cylinderResolution = 40;
