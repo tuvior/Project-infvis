@@ -8,16 +8,19 @@ public class Arch {
     public final static float columnCenter = 36;
     public final static float columnBoard = 32;
     public final static float columnHeight = 5;
-    public final static float columnRadius = 15;
+    public final static float columnRadius = 22;
     public final static float archWidth = 40;
     public final static float sizeForPrev = 15;
+    
+    public int archId;
 
-    public Arch(float posX, float posY, Game parent) {
+    public Arch(float posX, float posY, int id, Game parent) {
         location = new PVector(posX , posY );
         this.parent = parent;
        // arch = parent.loadShape("simpleArch.obj");
         arch = parent.loadShape("arch_center.obj");
         arch.scale(5);
+        this.archId = id;
     }
 
     public void display(boolean isPlaceable) {

@@ -65,7 +65,6 @@ private boolean sameScore = false;
              
                 velocity.x = v.x;
                 velocity.z = v.y;
-                parent.dataPanel.archHit();
             }
             
             float delta2X = location.x - arch.location.x - Arch.columnCenter;
@@ -81,15 +80,22 @@ private boolean sameScore = false;
                
                 velocity.x = v.x;
                 velocity.z = v.y;
-                parent.dataPanel.archHit();
             }
             
             float deltaTime = 1.50f;  //Delta time for reUpdate all code. 
             boolean score =  ((location.x >= arch.location.x - Arch.archWidth) && (location.x < arch.location.x + Arch.archWidth ) && (location.z <= arch.location.y + deltaTime) && (location.z >= arch.location.y - deltaTime)  ) ;
                       
-            if(score && !sameScore){
-              parent.scoreScore = parent.scoreScore + 1;
+            boolean diffArch = ( arch.archId != parent.lastArchId );
+            if (parent.archNbr == 1) {
+            	diffArch = true; //If we have only one arch on the game, the lastArch is obviously the same.
+            }
+            
+            if(score && !sameScore && diffArch){ //It's a win
+              parent.nbrScoreSuccess = parent.nbrScoreSuccess + 1;
               sameScore = true;
+              
+              parent.lastArchId = arch.archId;
+              parent.dataPanel.archSuccess();
             }
             else{
               sameScore = false;

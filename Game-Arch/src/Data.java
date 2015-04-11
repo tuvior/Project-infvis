@@ -13,7 +13,7 @@ public class Data{
     private int timer;
 
     public float score = 0;
-    private float lastScore = 0;
+    private float lastTopScore = 0;
 
     public Data(int w, int h, Game parent){
         graphics = parent.createGraphics(w,h,PApplet.P2D);
@@ -49,14 +49,15 @@ public class Data{
         float bally = parent.ball.location.z / (parent.boardSize / previewSize);
         graphics.ellipse(ballx + previewSize/2 + 5, bally + previewSize/2 + 5, previewSize/10, previewSize/10);
         graphics.fill(14, 101, 7);
+        
         for (Arch arch : parent.archs) {
             float archx = arch.location.x / (parent.boardSize / previewSize);
             float archy = arch.location.y / (parent.boardSize / previewSize);
             graphics.ellipse(archx + previewSize / 2 + 15, archy + previewSize / 2 + 5, previewSize * Arch.sizeForPrev / parent.boardSize, previewSize * Arch.sizeForPrev / parent.boardSize);
             graphics.ellipse(archx + previewSize / 2 - 5, archy + previewSize / 2 + 5, previewSize * Arch.sizeForPrev / parent.boardSize, previewSize * Arch.sizeForPrev / parent.boardSize);
             
-            //LINE BETWEEN THE 2 COOLUMS TO WORK...
-            graphics.line(archx + previewSize / 2 + 15, archy + previewSize / 2 + 5, archx + previewSize / 2 - 5, archy + previewSize / 2 + 5); 
+            //LINE DOESN'T WORK SO WE USE RECTANGLE...        
+            graphics.rect(archx + previewSize / 2 - 5, archy + previewSize / 2 + 4, 20, 1);
            
         }
         graphics.fill(210);
@@ -66,20 +67,19 @@ public class Data{
         graphics.text(score, 15 + previewSize, 35);
         graphics.text("Velocity:", 15 + previewSize, 55);
         graphics.text(parent.ball.velocity.mag(), 15 + previewSize, 70);
-        graphics.text("Last Score:", 15 + previewSize, 90);
-        graphics.text(lastScore, 15 + previewSize, 105);
+        graphics.text("Last Top Score:", 15 + previewSize, 90);
+        graphics.text(lastTopScore, 15 + previewSize, 105);
     }
 
-    public void archHit() {
-        score += parent.ball.velocity.mag();
-        if (score < 0) score = 0;
-        lastScore = parent.ball.velocity.mag();
+    
+    public void archSuccess(){
+    	score += 10;
     }
 
     public void boundHit(){
-        score -= parent.ball.velocity.mag();
+    	if(score > lastTopScore) lastTopScore = score;
+        score -= 1;
         if (score < 0) score = 0;
-        lastScore = -parent.ball.velocity.mag();
     }
 
 }

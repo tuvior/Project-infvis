@@ -25,7 +25,10 @@ public class Game extends PApplet {
     private final float speedLowLimit = 0.01f;
     private final float speedUpperLimit = 0.1f;
     public Data dataPanel;
-    public int scoreScore = 0;
+    public int nbrScoreSuccess = 0;
+    
+    public int archNbr = 0;
+    public int lastArchId = 0;
 
 
     public void setup() {
@@ -47,7 +50,7 @@ public class Game extends PApplet {
         dataPanel.draw(0, height - 120);
         fill(255);
         textSize(15);
-        text("rotationX: " + degrees(rotateX) + " rotationZ: " + degrees(rotateZ) + " rotation speed: " + movMagnitude + "   SCORES: " + scoreScore, 10, 20, 0);
+        text("rotationX: " + degrees(rotateX) + " rotationZ: " + degrees(rotateZ) + " rotation speed: " + movMagnitude + "   NBR: " + nbrScoreSuccess, 10, 20, 0);
         translate(width / 2, height / 2, 0);
         if (birdView) {
             //view the board from the top to place cylinders
@@ -57,11 +60,11 @@ public class Game extends PApplet {
             // Cylinder Preview
             if (archCheckBoard() && archCheckBall()) {
                 fill(80, 98, 112);
-                Arch arch = new Arch(mouseX - width / 2, mouseY - width / 2, this);
+                Arch arch = new Arch(mouseX - width / 2,  mouseY - width / 2, 0, this);
                 arch.display(true);
             } else {
                 fill(255, 0, 0);
-                Arch arch = new Arch(mouseX - width / 2, mouseY - width / 2, this);
+                Arch arch = new Arch(mouseX - width / 2, mouseY - width / 2, 0, this);
                 arch.display(false);
             }
         } else {
@@ -90,7 +93,8 @@ public class Game extends PApplet {
                 //don't place cylinders on the ball
                 if (archCheckBall()) {
                     //cylinders.add(new Cylinder(mouseX - width / 2, mouseY - width / 2, this));
-                    archs.add(new Arch(mouseX - width / 2, mouseY - width / 2, this));
+                	archNbr ++;
+                    archs.add(new Arch(mouseX - width / 2, mouseY - width / 2, archNbr, this));
                 }
             }
         }
