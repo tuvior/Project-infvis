@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -13,32 +11,50 @@ public class ImageProcessing extends PApplet {
 	
 	PImage img;
 	QuadGraph QG;
-
+	PImage houghImg;
+	
 	
 	public void setup() {
-		size(2000, 600);
-		img = loadImage("board1.jpg");
+		size(1800, 400);
+		img = loadImage("board4.jpg");
 		QG = new QuadGraph(this);
 		
 		//noLoop(); // no interactive behaviour: draw() will be called only once.
+		
+		
+		
+		/*
+		 * 
+		 * 
+		 * COMMENT ABOUT QUADGRAPH :
+		 * 		If I modify the minVotes values in hough to 100 and nLines=6, we get 2 possible 'lego board'... In that case, which one to choose ??
+		 * 		Since the build method from QuadGraph should return 'lines' that we send after to getIntesection... 
+		 * 
+		 * ASK ABOUT GAUSSIANBLUR :
+		 * 		It's the weight value set to 99 (sum of all) good ?
+		 * 
+		 */
 	}
 	
 	public void draw() {
-		background(color(0,0,0));
-	//	image(img,0,0);
 		
-		PImage hbsInter = hsbThreshold(img, 80f, 140f, 30f, 200f, 80f);
-		PImage blur = gaussianBlur(hbsInter); // NEED TO FIX BLURRING
+		background(color(0,0,0));
+		
+		img.resize(600, 400);
+		
+		image(img,0,0);
+		PImage hbsInter = hsbThreshold(img, 80f, 140f, 30f, 200f, 82f);
+		PImage blur = gaussianBlur(hbsInter); 
 		PImage thresholdInter = thresholdBinary(110, blur);
 		PImage sobel = sobel(thresholdInter);
-	
+		ArrayList<PVector> lines = hough(sobel, 6);
 		
-		ArrayList<PVector> lines =hough(sobel, 4);
-		
-		getIntersection(lines);		
 		QG.build(lines, width, img.height);
+		getIntersection(lines);		
 		
-		image(sobel,1200,0);
+		
+		image(houghImg,600,0);
+		image(sobel,1200,0);	
 	}
 
 	
@@ -219,8 +235,8 @@ public class ImageProcessing extends PApplet {
 		// Fill the accumulator: on edge points (ie, white pixels of the edge
 		// image), store all possible (r, phi) pairs describing lines going
 		// through the point.
-		for (int x = 0; x < edgeImg.width; x++) {
-			for (int y = 0; y < edgeImg.height; y++) {
+		for (int y = 0; y < edgeImg.height; y++) {
+			for (int x = 0; x < edgeImg.width; x++) {
 				// Are we on an edge?
 				if (brightness(edgeImg.pixels[y * edgeImg.width + x]) != 0) {	
 					
@@ -244,7 +260,7 @@ public class ImageProcessing extends PApplet {
 		
 //		PRINT THE HOUGH ACCUMULATOR
 		
-		PImage houghImg = createImage(rDim + 2, phiDim +2, ALPHA);
+		houghImg = createImage(rDim + 2, phiDim +2, ALPHA);
 		
 		for(int i=0; i< accumulator.length; i++){
 			houghImg.pixels[i] = color(min(255, accumulator[i]));
@@ -252,18 +268,20 @@ public class ImageProcessing extends PApplet {
 		
 		houghImg.updatePixels();
 		
-		image(houghImg,850,0);
+		houghImg.resize(img.width, img.height);
+		
 
+		
+		
 		
 
 		//SELECT ONLY THE MOST VOTED NLINES, value bigger thatminVotes
-		int minVotes = 100;
+		int minVotes = 200;
 		// size of the region we search for a local maximum
 		int neighbourhood = 10;
 		
 		ArrayList<Integer> bestCandidates = new ArrayList<Integer>();
 				
-		
 		for (int accR = 0; accR < rDim; accR++) {
 			for (int accPhi = 0; accPhi < phiDim; accPhi++) {
 				// compute current index in the accumulator
@@ -275,6 +293,7 @@ public class ImageProcessing extends PApplet {
 						// check we are not outside the image
 						if( accPhi+dPhi < 0 || accPhi+dPhi >= phiDim) continue;
 						for(int dR=-neighbourhood/2; dR < neighbourhood/2 +1; dR++) {
+
 							// check we are not outside the image
 							if(accR+dR < 0 || accR+dR >= rDim) continue;
 							int neighbourIdx = (accPhi + dPhi + 1) * (rDim + 2) + accR + dR + 1;
@@ -293,10 +312,15 @@ public class ImageProcessing extends PApplet {
 				}
 			}
 		}
-			
+		
 		
 		Collections.sort(bestCandidates, new HoughComparator(accumulator));//sort the arrayList
 		int[] accumulatorNew = new int[(phiDim + 2) * (rDim + 2)];
+		
+		
+		
+		nLines = min(nLines, bestCandidates.size()); 
+
 		
 		for(int i = 0; i< nLines; i++ ){
 			int idx = bestCandidates.get(i) ;

@@ -55,7 +55,6 @@ public class QuadGraph extends PApplet {
             }
         }
 
-        
         for (int[] quad : findCycles()) {
 			PVector l1 = lines.get(quad[0]);
 			PVector l2 = lines.get(quad[1]);
@@ -72,7 +71,7 @@ public class QuadGraph extends PApplet {
 			PVector c41 = intersection(l4, l1);
 			
 			
-			if(isConvex(c12, c23, c34, c41)  &&   nonFlatQuad(c12, c23, c34, c41)){
+			if(isConvex(c12, c23, c34, c41)    &&  validArea(c12, c23, c34, c41, parent.img.width*parent.img.width, 5000) && nonFlatQuad(c12, c23, c34, c41)){
 				// Choose a random, semi-transparent colour
 				Random random = new Random();
 				
@@ -333,6 +332,9 @@ public class QuadGraph extends PApplet {
         boolean valid = (area < max_area && area > min_area);
    
         if (!valid) System.out.println("Area out of range");
+        else{
+        	System.out.println("Valid");
+        }
         
         return valid;
    }
@@ -343,7 +345,7 @@ public class QuadGraph extends PApplet {
     public static boolean nonFlatQuad(PVector c1,PVector c2,PVector c3,PVector c4){
         
         // cos(70deg) ~= 0.3
-        float min_cos = 0.3f;
+        float min_cos = 0.5f;
         
         PVector v21= PVector.sub(c1, c2);
         PVector v32= PVector.sub(c2, c3);
