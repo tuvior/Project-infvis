@@ -17,8 +17,9 @@ public class HoughTransform extends PApplet {
 	PImage img;
 	QuadGraph QG;
 	
+	
 	public void setup() {	
-		size(1280,720);
+		size(1280,1020);
 		
 		String[] cameras = Capture.list();
 		if (cameras.length == 0) {
@@ -31,7 +32,7 @@ public class HoughTransform extends PApplet {
 				println(i+" - "+ cameras[i]);
 		}
 			
-		cam = new Capture(this, cameras[10]);
+		cam = new Capture(this, cameras[0]);
 		cam.start();
 		
 		QG = new QuadGraph(this);
@@ -48,17 +49,20 @@ public class HoughTransform extends PApplet {
 		img = cam.get();
 		
 		image(img,0,0);
-		PImage hbsInter = hsbThreshold(img, 80f, 140f, 30f, 200f, 82f);
-		PImage blur = gaussianBlur(hbsInter); 
-		PImage thresholdInter = thresholdBinary(110, blur);
-		PImage sobel = sobel(thresholdInter);		
-		ArrayList<PVector> lines = hough(sobel, 6);
+		PImage hbsInter = hsbThreshold(img, 90f, 125f, 30f, 250f, 82f);
 		
-		QG.build(lines, width, img.height);
-		getIntersection(lines);	
-	}
-
+		image(hbsInter,0,480);
+		
+		PImage blur = gaussianBlur(hbsInter); 
+		PImage thresholdInter = thresholdBinary(100, blur);		
+		PImage sobel = sobel(thresholdInter);				
 	
+	//	image(sobel,0,480);
+		ArrayList<PVector> lines = QG.build(hough(sobel, 6), width, img.height);
+		
+		getIntersection(lines);		
+		drawLines(lines, sobel);
+	}
 	private PImage thresholdBinary(float threshold, PImage img) {
 		PImage result = createImage(width, height, RGB);
 
@@ -90,6 +94,7 @@ public class HoughTransform extends PApplet {
 				float s = saturation(img.get(i,j));
 				
 				if(h > hueMin &&  h < hueMax  &&  b > bMin  &&  b < bMax  &&  s > sMin) {
+			//	if(h > hueMin &&  h < hueMax){
 					result.set(i,j, color(255));
 				} else {
 					result.set(i,j, color(0));
@@ -259,7 +264,7 @@ public class HoughTransform extends PApplet {
 		
 
 		//SELECT ONLY THE MOST VOTED NLINES, value bigger thatminVotes
-		int minVotes = 200;
+		int minVotes = 100;
 		// size of the region we search for a local maximum
 		int neighbourhood = 10;
 		
@@ -324,7 +329,7 @@ public class HoughTransform extends PApplet {
 				float phi = accPhi * discretizationStepsPhi;
 				
 				result.add(new PVector(r,phi));
-				
+			/*	
 				int x0 = 0;
 				int y0 = (int) (r / sin(phi));
 				int x1 = (int) (r / cos(phi));
@@ -354,6 +359,7 @@ public class HoughTransform extends PApplet {
 					else
 						line(x2, y2, x3, y3);
 				}
+			*/
 			}
 			
 		}
@@ -362,6 +368,45 @@ public class HoughTransform extends PApplet {
 		
 	}
 
+		
+	public void drawLines(ArrayList<PVector> lines, PImage edgeImg) {
+		
+		for(int i=0; i<lines.size(); i++){
+			
+			float r = lines.get(i).x;
+			float phi = lines.get(i).y;
+			
+			int x0 = 0;
+			int y0 = (int) (r / sin(phi));
+			int x1 = (int) (r / cos(phi));
+			int y1 = 0;
+			int x2 = edgeImg.width;
+			int y2 = (int) (-cos(phi) / sin(phi) * x2 + r / sin(phi));
+			int y3 = edgeImg.width;
+			int x3 = (int) (-(y3 - r / sin(phi)) * (sin(phi) / cos(phi)));
+			
+			// Finally, plot the lines
+			stroke(204,102,0);
+			if (y0 > 0) {
+				if (x1 > 0)
+					line(x0, y0, x1, y1);
+				else if (y2 > 0)
+					line(x0, y0, x2, y2);
+				else
+					line(x0, y0, x3, y3);
+			}
+			else {
+				if (x1 > 0) {
+					if (y2 > 0)
+						line(x1, y1, x2, y2);
+					else
+						line(x1, y1, x3, y3);
+				}
+				else
+					line(x2, y2, x3, y3);
+			}
+		}
+	}
 	
 	
 	public ArrayList<PVector> getIntersection(ArrayList<PVector> lines){
@@ -397,3 +442,8 @@ public class HoughTransform extends PApplet {
 	}
 
 }
+
+
+
+
+

@@ -21,7 +21,6 @@ public class QuadGraph extends PApplet {
     int[][] graph;
     
     
-    
 
     
     public QuadGraph(ImageProcessing parent) {
@@ -30,8 +29,10 @@ public class QuadGraph extends PApplet {
 
     
     
-    public void build(List<PVector> lines, int width, int height) {
-        
+    public ArrayList<PVector> build(List<PVector> lines, int width, int height) {
+    	
+    	ArrayList<PVector> candidateLines = new ArrayList<PVector>();
+        int candidateLinesIndex = 0;
         int n = lines.size();
         
         // The maximum possible number of edges is sum(0..n) = n * (n + 1)/2
@@ -72,7 +73,7 @@ public class QuadGraph extends PApplet {
 			
 			
 			if(isConvex(c12, c23, c34, c41)    &&  validArea(c12, c23, c34, c41, parent.img.width*parent.img.width, 5000) && nonFlatQuad(c12, c23, c34, c41)){
-				// Choose a random, semi-transparent colour
+		/*		// Choose a random, semi-transparent colour
 				Random random = new Random();
 				
 				parent.fill(color(min(255, random.nextInt(300)),
@@ -80,8 +81,19 @@ public class QuadGraph extends PApplet {
 						min(255, random.nextInt(300))),50);
 	
 				parent.quad(c12.x,c12.y,c23.x,c23.y,c34.x,c34.y,c41.x,c41.y);
+			*/	
+				if(candidateLinesIndex == 0){
+					//Take valid lines into account 
+					candidateLines.add(l1);
+					candidateLines.add(l2);
+					candidateLines.add(l3);
+					candidateLines.add(l4);
+					candidateLinesIndex ++;
+				}
         	}
         }
+        
+        return candidateLines;
  
     }
     

@@ -16,24 +16,10 @@ public class ImageProcessing extends PApplet {
 	
 	public void setup() {
 		size(1800, 400);
-		img = loadImage("board4.jpg");
+		img = loadImage("board1.jpg");
 		QG = new QuadGraph(this);
 		
 		//noLoop(); // no interactive behaviour: draw() will be called only once.
-		
-		
-		
-		/*
-		 * 
-		 * 
-		 * COMMENT ABOUT QUADGRAPH :
-		 * 		If I modify the minVotes values in hough to 100 and nLines=6, we get 2 possible 'lego board'... In that case, which one to choose ??
-		 * 		Since the build method from QuadGraph should return 'lines' that we send after to getIntesection... 
-		 * 
-		 * ASK ABOUT GAUSSIANBLUR :
-		 * 		It's the weight value set to 99 (sum of all) good ?
-		 * 
-		 */
 	}
 	
 	public void draw() {
@@ -47,10 +33,10 @@ public class ImageProcessing extends PApplet {
 		PImage blur = gaussianBlur(hbsInter); 
 		PImage thresholdInter = thresholdBinary(110, blur);
 		PImage sobel = sobel(thresholdInter);
-		ArrayList<PVector> lines = hough(sobel, 6);
+		ArrayList<PVector> lines = QG.build(hough(sobel, 6), width, img.height);
 		
-		QG.build(lines, width, img.height);
 		getIntersection(lines);		
+		drawLines(lines, sobel);
 		
 		
 		image(houghImg,600,0);
@@ -341,7 +327,7 @@ public class ImageProcessing extends PApplet {
 				float phi = accPhi * discretizationStepsPhi;
 				
 				result.add(new PVector(r,phi));
-				
+			/*	
 				int x0 = 0;
 				int y0 = (int) (r / sin(phi));
 				int x1 = (int) (r / cos(phi));
@@ -371,6 +357,7 @@ public class ImageProcessing extends PApplet {
 					else
 						line(x2, y2, x3, y3);
 				}
+			*/
 			}
 			
 		}
@@ -379,6 +366,45 @@ public class ImageProcessing extends PApplet {
 		
 	}
 
+		
+	public void drawLines(ArrayList<PVector> lines, PImage edgeImg) {
+		
+		for(int i=0; i<lines.size(); i++){
+			
+			float r = lines.get(i).x;
+			float phi = lines.get(i).y;
+			
+			int x0 = 0;
+			int y0 = (int) (r / sin(phi));
+			int x1 = (int) (r / cos(phi));
+			int y1 = 0;
+			int x2 = edgeImg.width;
+			int y2 = (int) (-cos(phi) / sin(phi) * x2 + r / sin(phi));
+			int y3 = edgeImg.width;
+			int x3 = (int) (-(y3 - r / sin(phi)) * (sin(phi) / cos(phi)));
+			
+			// Finally, plot the lines
+			stroke(204,102,0);
+			if (y0 > 0) {
+				if (x1 > 0)
+					line(x0, y0, x1, y1);
+				else if (y2 > 0)
+					line(x0, y0, x2, y2);
+				else
+					line(x0, y0, x3, y3);
+			}
+			else {
+				if (x1 > 0) {
+					if (y2 > 0)
+						line(x1, y1, x2, y2);
+					else
+						line(x1, y1, x3, y3);
+				}
+				else
+					line(x2, y2, x3, y3);
+			}
+		}
+	}
 	
 	
 	public ArrayList<PVector> getIntersection(ArrayList<PVector> lines){
