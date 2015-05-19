@@ -17,8 +17,7 @@ public class Arch {
     public Arch(float posX, float posY, int id, Game parent) {
         location = new PVector(posX , posY );
         this.parent = parent;
-        //arch = parent.loadShape("arco_senza_texture.obj");
-        arch = parent.loadShape("arco_nuovo.obj");
+        arch = parent.loadShape("arco_texture_buone.obj");
         //arch.scale(1);
         this.archId = id;
     }
@@ -26,7 +25,6 @@ public class Arch {
     public void display(boolean isPlaceable) {
         parent.pushMatrix();
         
-        //parent.translate(location.x+10, -2, location.y+30);
         parent.translate(location.x, -37, location.y);
         
         parent.rotateX((float) Math.PI);
@@ -37,10 +35,8 @@ public class Arch {
 
     public void display() {
         parent.pushMatrix();
-        //parent.translate(location.x+10, -2, location.y+30);
         parent.translate(location.x, -37, location.y);
         parent.rotateX((float) Math.PI);
-      //  parent.rotateY((float) Math.PI / 2);
         parent.shape(arch);
         parent.popMatrix();
     }
