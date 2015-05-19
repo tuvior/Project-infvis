@@ -55,11 +55,11 @@ public class MovingBall {
     public void checkCylinderCollision() {
 
         for (Arch arch : parent.archs) {
-            float deltaX = location.x - arch.location.x + Arch.columnCenter;
-            float deltaY = location.z - arch.location.y;
+            float deltaX = location.x - arch.lColumn.x;
+            float deltaY = location.z - arch.lColumn.y;
 
-            float deltaX2 = location.x - arch.location.x - Arch.columnCenter;
-            float deltaY2 = location.z - arch.location.y ;
+            float deltaX2 = location.x - arch.rColumn.x;
+            float deltaY2 = location.z - arch.rColumn.y ;
 
             if (PApplet.sqrt((deltaX * deltaX) + (deltaY * deltaY)) <= Arch.columnRadius + radius) {
                 PVector n = new PVector(deltaX, deltaY);
@@ -74,8 +74,8 @@ public class MovingBall {
                 n.mult(arch.columnRadius + radius);
 
 
-                location.x = arch.location.x - Arch.columnCenter + n.x;
-                location.z = arch.location.y + n.y;
+                location.x = arch.lColumn.x + n.x;
+                location.z = arch.lColumn.y + n.y;
                 velocity.x = v.x;
                 velocity.z = v.y;
             } else if (PApplet.sqrt((deltaX2 * deltaX2) + (deltaY2 * deltaY2)) <= Arch.columnRadius) {
@@ -91,8 +91,8 @@ public class MovingBall {
                 n.mult(arch.columnRadius + radius);
 
 
-                location.x = arch.location.x + Arch.columnCenter + n.x;
-                location.z = arch.location.y + n.y;
+                location.x = arch.rColumn.x + n.x;
+                location.z = arch.rColumn.y + n.y;
 
                 velocity.x = v.x;
                 velocity.z = v.y;

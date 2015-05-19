@@ -15,24 +15,38 @@ public class Arch {
     public final static float archWidth = 52;
     public final static float sizeForPrev = 15;
 
-    public int archId;
+    PVector lColumn;
+    PVector rColumn;
 
-    public Arch(float posX, float posY, int id, Game parent) {
+    public int archId;
+    public float rotation;
+
+    public Arch(float posX, float posY, int id, float rotation,  Game parent) {
         location = new PVector(posX , posY );
         this.parent = parent;
-        //arch = parent.loadShape("arco_senza_texture.obj");
         arch = parent.loadShape("data/arco_nuovo.obj");
-        //arch.scale(1);
         this.archId = id;
+        this.rotation = rotation;
+
+        lColumn = new PVector(- columnCenter, 0);
+        rColumn = new PVector(columnCenter, 0);
+
+        lColumn.rotate(rotation);
+        rColumn.rotate(rotation);
+
+        lColumn.add(location);
+        rColumn.add(location);
+
+
     }
 
     public void display(boolean isPlaceable) {
         parent.pushMatrix();
 
-        //parent.translate(location.x+10, -2, location.y+30);
         parent.translate(location.x, -37, location.y);
 
         parent.rotateX((float) Math.PI);
+        parent.rotateY(rotation);
         if(!isPlaceable) arch.setFill(parent.color(255,0,0));
         parent.shape(arch);
         parent.popMatrix();
@@ -40,10 +54,11 @@ public class Arch {
 
     public void display() {
         parent.pushMatrix();
-        //parent.translate(location.x+10, -2, location.y+30);
+
         parent.translate(location.x, -37, location.y);
         parent.rotateX((float) Math.PI);
-        //  parent.rotateY((float) Math.PI / 2);
+
+        parent.rotateY(rotation);
         parent.shape(arch);
         parent.popMatrix();
     }

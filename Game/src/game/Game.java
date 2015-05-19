@@ -30,6 +30,7 @@ public class Game extends PApplet {
     public Data dataPanel;
     public int successfulPasses = 0;
 
+    public float currentRot = 0;
     public int archNbr = 0;
     public int lastArchId = 0;
 
@@ -62,11 +63,11 @@ public class Game extends PApplet {
             // Cylinder Preview
             if (archCheckBoard() && archCheckBall()) {
                 fill(80, 98, 112);
-                Arch arch = new Arch(mouseX - width / 2,  mouseY - width / 2, 0, this);
+                Arch arch = new Arch(mouseX - width / 2,  mouseY - width / 2, 0, currentRot, this);
                 arch.display(true);
             } else {
                 fill(255, 0, 0);
-                Arch arch = new Arch(mouseX - width / 2, mouseY - width / 2, 0, this);
+                Arch arch = new Arch(mouseX - width / 2, mouseY - width / 2, 0, currentRot, this);
                 arch.display(false);
             }
         } else {
@@ -95,7 +96,7 @@ public class Game extends PApplet {
                 //don't place arch on the ball
                 if (archCheckBall()) {
                     archNbr ++;
-                    archs.add(new Arch(mouseX - width / 2, mouseY - width / 2, archNbr, this));
+                    archs.add(new Arch(mouseX - width / 2, mouseY - width / 2, archNbr, currentRot, this));
                 }
             }
         }
@@ -134,15 +135,28 @@ public class Game extends PApplet {
 
     public void mouseWheelMoved(MouseWheelEvent e) {
         float w = e.getWheelRotation();
-        if (w < 0) {
-            movMagnitude = movMagnitude * speedCoeff;
-        } else if (w > 0) {
-            movMagnitude = movMagnitude / speedCoeff;
-        }
-        if (movMagnitude < speedLowLimit) {
-            movMagnitude = speedLowLimit;
-        } else if (movMagnitude > speedUpperLimit) {
-            movMagnitude = speedUpperLimit;
+        if (birdView) {
+            if (w < 0) {
+                currentRot = currentRot + (float)(Math.PI / 16);
+            } else if (w > 0) {
+                currentRot = currentRot - (float)(Math.PI / 16);
+            }
+            if (currentRot < 0) {
+                currentRot = (float)Math.PI*2;
+            } else if (currentRot > Math.PI*2) {
+                currentRot = 0;
+            }
+        } else {
+            if (w < 0) {
+                movMagnitude = movMagnitude * speedCoeff;
+            } else if (w > 0) {
+                movMagnitude = movMagnitude / speedCoeff;
+            }
+            if (movMagnitude < speedLowLimit) {
+                movMagnitude = speedLowLimit;
+            } else if (movMagnitude > speedUpperLimit) {
+                movMagnitude = speedUpperLimit;
+            }
         }
     }
 
