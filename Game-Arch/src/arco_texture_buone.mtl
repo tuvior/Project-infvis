@@ -9,7 +9,7 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd sopra.png
+map_Kd texture_sopra_buona.png
 
 newmtl Material.002
 Ns 96.078431
@@ -19,4 +19,4 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd colonne_nuovo.png
+map_Kd texture_colonne_buona.png
