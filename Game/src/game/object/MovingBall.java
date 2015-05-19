@@ -1,7 +1,6 @@
 package game.object;
 
 import game.Game;
-import game.object.Arch;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -9,7 +8,7 @@ public class MovingBall {
     private Game parent;
     public PVector location;
     public PVector velocity;
-    public final static float radius = 20;
+    public final static float radius = 15;
 
     private PVector gravityForce = new PVector(0, 0, 0);
     private final float gravityConstant = 0.1f;
@@ -22,14 +21,14 @@ public class MovingBall {
     private boolean sameScore = false;
 
     public MovingBall(Game parent) {
-        location = new PVector(0, -22.5f, 0);
+        location = new PVector(0, -17.5f, 0);
         velocity = new PVector(0, 0, 0);
         this.parent = parent;
     }
 
     // unused at the moment
     public void reset() {
-        location = new PVector(0, -22.5f, 0);
+        location = new PVector(0, -17.5f, 0);
         velocity = new PVector(0, 0, 0);
     }
 
@@ -59,7 +58,10 @@ public class MovingBall {
             float deltaX = location.x - arch.location.x + Arch.columnCenter;
             float deltaY = location.z - arch.location.y;
 
-            if (PApplet.sqrt((deltaX * deltaX) + (deltaY * deltaY)) <= Arch.columnRadius) {
+            float deltaX2 = location.x - arch.location.x - Arch.columnCenter;
+            float deltaY2 = location.z - arch.location.y ;
+
+            if (PApplet.sqrt((deltaX * deltaX) + (deltaY * deltaY)) <= Arch.columnRadius + radius) {
                 PVector n = new PVector(deltaX, deltaY);
                 n.normalize();
                 PVector v = new PVector(velocity.x, velocity.z);
@@ -67,20 +69,30 @@ public class MovingBall {
                 n.mult(te);
                 v.sub(n);
 
+                n = new PVector(deltaX, deltaY);
+                n.normalize();
+                n.mult(arch.columnRadius + radius);
+
+
+                location.x = arch.location.x - Arch.columnCenter + n.x;
+                location.z = arch.location.y + n.y;
                 velocity.x = v.x;
                 velocity.z = v.y;
-            }
-
-            float delta2X = location.x - arch.location.x - Arch.columnCenter;
-            float delta2Y = location.z - arch.location.y;
-
-            if (PApplet.sqrt((delta2X * delta2X) + (delta2Y * delta2Y)) <= Arch.columnRadius) {
-                PVector n = new PVector(delta2X, delta2Y);
+            } else if (PApplet.sqrt((deltaX2 * deltaX2) + (deltaY2 * deltaY2)) <= Arch.columnRadius) {
+                PVector n = new PVector(deltaX2, deltaY2);
                 n.normalize();
                 PVector v = new PVector(velocity.x, velocity.z);
                 float te = 2 * v.dot(n);
                 n.mult(te);
                 v.sub(n);
+
+                n = new PVector(deltaX2, deltaY2);
+                n.normalize();
+                n.mult(arch.columnRadius + radius);
+
+
+                location.x = arch.location.x + Arch.columnCenter + n.x;
+                location.z = arch.location.y + n.y;
 
                 velocity.x = v.x;
                 velocity.z = v.y;
@@ -95,7 +107,7 @@ public class MovingBall {
             }
 
             if(score && !sameScore && diffArch){ //It's a win
-                parent.nbrScoreSuccess = parent.nbrScoreSuccess + 1;
+                parent.successfulPasses = parent.successfulPasses + 1;
                 sameScore = true;
 
                 parent.lastArchId = arch.archId;

@@ -1,4 +1,4 @@
-package game;
+package game.image.webcam;
 
 import java.util.List;
 

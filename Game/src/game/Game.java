@@ -28,7 +28,7 @@ public class Game extends PApplet {
     private final float speedLowLimit = 0.01f;
     private final float speedUpperLimit = 0.1f;
     public Data dataPanel;
-    public int nbrScoreSuccess = 0;
+    public int successfulPasses = 0;
 
     public int archNbr = 0;
     public int lastArchId = 0;
@@ -42,8 +42,7 @@ public class Game extends PApplet {
         boundZ1 = height / 2 - boardSize / 2;
         boundZ2 = height / 2 + boardSize / 2;
         noStroke();
-        noSmooth();
-        archs = new ArrayList<Arch>();
+        archs = new ArrayList<>();
         dataPanel = new Data(width, 120, this);
     }
 
@@ -53,7 +52,7 @@ public class Game extends PApplet {
         dataPanel.draw(0, height - 120);
         fill(255);
         textSize(15);
-        text("rotationX: " + degrees(rotateX) + " rotationZ: " + degrees(rotateZ) + " rotation speed: " + movMagnitude + "   NBR: " + nbrScoreSuccess, 10, 20, 0);
+        text("rotationX: " + degrees(rotateX) + " rotationZ: " + degrees(rotateZ) + " rotation speed: " + movMagnitude + "   Passes: " + successfulPasses, 10, 20, 0);
         translate(width / 2, height / 2, 0);
         if (birdView) {
             //view the board from the top to place cylinders
@@ -91,11 +90,10 @@ public class Game extends PApplet {
     @Override
     public void mouseClicked() {
         if (birdView) {
-            //don't place cylinders outside of the board
+            //don't place arch outside of the board
             if (archCheckBoard()) {
-                //don't place cylinders on the ball
+                //don't place arch on the ball
                 if (archCheckBall()) {
-                    //cylinders.add(new Cylinder(mouseX - width / 2, mouseY - width / 2, this));
                     archNbr ++;
                     archs.add(new Arch(mouseX - width / 2, mouseY - width / 2, archNbr, this));
                 }

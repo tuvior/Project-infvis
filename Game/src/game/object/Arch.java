@@ -9,10 +9,10 @@ public class Arch {
     Game parent;
 
     public final static float columnCenter = 36;
-    public final static float columnBoard = 32;
-    public final static float columnHeight = 5;
-    public final static float columnRadius = 22;
-    public final static float archWidth = 40;
+    public final static float columnBoard = 40;
+    public final static float columnHeight = 0;
+    public final static float columnRadius = 10;
+    public final static float archWidth = 52;
     public final static float sizeForPrev = 15;
 
     public int archId;
@@ -20,17 +20,19 @@ public class Arch {
     public Arch(float posX, float posY, int id, Game parent) {
         location = new PVector(posX , posY );
         this.parent = parent;
-        // arch = parent.loadShape("simpleArch.obj");
-        arch = parent.loadShape("data/arch_center.obj");
-        arch.scale(5);
+        //arch = parent.loadShape("arco_senza_texture.obj");
+        arch = parent.loadShape("data/arco_nuovo.obj");
+        //arch.scale(1);
         this.archId = id;
     }
 
     public void display(boolean isPlaceable) {
         parent.pushMatrix();
-        parent.translate(location.x, 0, location.y);
+
+        //parent.translate(location.x+10, -2, location.y+30);
+        parent.translate(location.x, -37, location.y);
+
         parent.rotateX((float) Math.PI);
-        parent.rotateY((float) Math.PI / 2);
         if(!isPlaceable) arch.setFill(parent.color(255,0,0));
         parent.shape(arch);
         parent.popMatrix();
@@ -38,9 +40,10 @@ public class Arch {
 
     public void display() {
         parent.pushMatrix();
-        parent.translate(location.x, 0, location.y);
+        //parent.translate(location.x+10, -2, location.y+30);
+        parent.translate(location.x, -37, location.y);
         parent.rotateX((float) Math.PI);
-        parent.rotateY((float) Math.PI / 2);
+        //  parent.rotateY((float) Math.PI / 2);
         parent.shape(arch);
         parent.popMatrix();
     }
