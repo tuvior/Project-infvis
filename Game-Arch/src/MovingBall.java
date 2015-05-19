@@ -5,7 +5,7 @@ public class MovingBall {
     private Game parent;
     public PVector location;
     public PVector velocity;
-    public final static float radius = 20;
+    public final static float radius = 15;
 
     private PVector gravityForce = new PVector(0, 0, 0);
     private final float gravityConstant = 0.1f;
@@ -18,14 +18,14 @@ public class MovingBall {
 private boolean sameScore = false;
 
     public MovingBall(Game parent) {
-        location = new PVector(0, -22.5f, 0);
+        location = new PVector(0, -17.5f, 0);
         velocity = new PVector(0, 0, 0);
         this.parent = parent;
     }
 
     // unused at the moment
     public void reset() {
-        location = new PVector(0, -22.5f, 0);
+        location = new PVector(0, -17.5f, 0);
         velocity = new PVector(0, 0, 0);
     }
 

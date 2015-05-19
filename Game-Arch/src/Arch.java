@@ -17,15 +17,17 @@ public class Arch {
     public Arch(float posX, float posY, int id, Game parent) {
         location = new PVector(posX , posY );
         this.parent = parent;
-        arch = parent.loadShape("arch.obj");
-        arch.scale(1);
+        //arch = parent.loadShape("arco_senza_texture.obj");
+        arch = parent.loadShape("arco_nuovo.obj");
+        //arch.scale(1);
         this.archId = id;
     }
 
     public void display(boolean isPlaceable) {
         parent.pushMatrix();
         
-        parent.translate(location.x+120, -100, location.y);
+        //parent.translate(location.x+10, -2, location.y+30);
+        parent.translate(location.x, -37, location.y);
         
         parent.rotateX((float) Math.PI);
         if(!isPlaceable) arch.setFill(parent.color(255,0,0));
@@ -35,7 +37,8 @@ public class Arch {
 
     public void display() {
         parent.pushMatrix();
-        parent.translate(location.x+120, -99, location.y);
+        //parent.translate(location.x+10, -2, location.y+30);
+        parent.translate(location.x, -37, location.y);
         parent.rotateX((float) Math.PI);
       //  parent.rotateY((float) Math.PI / 2);
         parent.shape(arch);
