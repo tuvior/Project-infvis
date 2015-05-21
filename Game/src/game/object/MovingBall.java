@@ -98,9 +98,11 @@ public class MovingBall {
                 velocity.z = v.y;
             }
 
-            float deltaTime = 1.50f;  //Delta time for reUpdate all code. 
-            boolean score =  ((location.x >= arch.location.x - Arch.archWidth) && (location.x < arch.location.x + Arch.archWidth ) && (location.z <= arch.location.y + deltaTime) && (location.z >= arch.location.y - deltaTime)  ) ;
+            float deltaTime = 1.50f;  //Delta time for reUpdate all code.
 
+            // TODO: SCORE DETECTION!
+            // SEE: Check if point is inside rectangle
+            boolean score =  ((location.x >= arch.location.x - Arch.archWidth) && (location.x < arch.location.x + Arch.archWidth ) && (location.z <= arch.location.y + deltaTime) && (location.z >= arch.location.y - deltaTime)  ) ;
             boolean diffArch = ( arch.archId != parent.lastArchId );
             if (parent.archNbr == 1) {
                 diffArch = true; //If we have only one arch on the game, the lastArch is obviously the same.

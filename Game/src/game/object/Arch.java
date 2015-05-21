@@ -4,9 +4,10 @@ import game.Game;
 import processing.core.*;
 
 public class Arch {
-    PShape arch;
+    public static PShape archPreview;
+    public static PShape arch;
     public PVector location;
-    Game parent;
+    private Game parent;
 
     public final static float columnCenter = 36;
     public final static float columnBoard = 40;
@@ -15,16 +16,16 @@ public class Arch {
     public final static float archWidth = 52;
     public final static float sizeForPrev = 15;
 
-    PVector lColumn;
-    PVector rColumn;
+    public PVector lColumn;
+    public PVector rColumn;
 
     public int archId;
     public float rotation;
 
+
     public Arch(float posX, float posY, int id, float rotation,  Game parent) {
         location = new PVector(posX , posY );
         this.parent = parent;
-        arch = parent.loadShape("data/arco_nuovo.obj");
         this.archId = id;
         this.rotation = rotation;
 
@@ -40,15 +41,19 @@ public class Arch {
 
     }
 
-    public void display(boolean isPlaceable) {
+    public void preview(boolean isPlaceable, float rotation) {
+        PVector loc = new PVector(parent.mouseX - parent.width / 2, parent.mouseY - parent.height / 2);
         parent.pushMatrix();
 
-        parent.translate(location.x, -37, location.y);
+        parent.translate(loc.x, -37, loc.y);
 
         parent.rotateX((float) Math.PI);
         parent.rotateY(rotation);
-        if(!isPlaceable) arch.setFill(parent.color(255,0,0));
-        parent.shape(arch);
+        if(!isPlaceable) {
+            parent.shape(archPreview);
+        } else {
+            parent.shape(arch);
+        }
         parent.popMatrix();
     }
 

@@ -55,14 +55,18 @@ public class Data{
         graphics.fill(14, 101, 7);
 
         for (Arch arch : parent.archs) {
-            float archx = arch.location.x / (parent.boardSize / previewSize);
-            float archy = arch.location.y / (parent.boardSize / previewSize);
-            graphics.ellipse(archx + previewSize / 2 + 15, archy + previewSize / 2 + 5, previewSize * Arch.sizeForPrev / parent.boardSize, previewSize * Arch.sizeForPrev / parent.boardSize);
-            graphics.ellipse(archx + previewSize / 2 - 5, archy + previewSize / 2 + 5, previewSize * Arch.sizeForPrev / parent.boardSize, previewSize * Arch.sizeForPrev / parent.boardSize);
+            float arch1x = arch.lColumn.x / (parent.boardSize / previewSize);
+            float arch1y = arch.lColumn.y / (parent.boardSize / previewSize);
+            float arch2x = arch.rColumn.x / (parent.boardSize / previewSize);
+            float arch2y = arch.rColumn.y / (parent.boardSize / previewSize);
+            graphics.ellipse(arch1x + previewSize / 2 + 5, arch1y + previewSize / 2 + 5, previewSize * Arch.sizeForPrev / parent.boardSize, previewSize * Arch.sizeForPrev / parent.boardSize);
+            graphics.ellipse(arch2x + previewSize / 2 + 5, arch2y + previewSize / 2 + 5, previewSize * Arch.sizeForPrev / parent.boardSize, previewSize * Arch.sizeForPrev / parent.boardSize);
 
-            //LINE DOESN'T WORK SO WE USE RECTANGLE...        
-            graphics.rect(archx + previewSize / 2 - 5, archy + previewSize / 2 + 4, 20, 1);
-
+            graphics.pushMatrix();
+            graphics.translate(arch1x + previewSize / 2 + 5, arch1y + previewSize / 2 + 5);
+            graphics.rotate(arch.rotation);
+            graphics.rect(0, -1, 20, 2);
+            graphics.popMatrix();
         }
         graphics.fill(210);
         graphics.rect(10 + previewSize, 5, previewSize - 10, previewSize);

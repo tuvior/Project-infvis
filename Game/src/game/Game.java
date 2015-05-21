@@ -34,6 +34,7 @@ public class Game extends PApplet {
     public int archNbr = 0;
     public int lastArchId = 0;
 
+    private Arch preview;
 
     public void setup() {
         size(800, 800, P3D);
@@ -45,6 +46,11 @@ public class Game extends PApplet {
         noStroke();
         archs = new ArrayList<>();
         dataPanel = new Data(width, 120, this);
+        //statically load arch shape for performance
+        Arch.archPreview = loadShape("data/arco_texture_buone.obj");
+        Arch.archPreview.setFill(color(255,0,0));
+        Arch.arch = loadShape("data/arco_texture_buone.obj");
+        preview = new Arch(0, 0, 0, 0, this);
     }
 
     public void draw() {
@@ -60,16 +66,8 @@ public class Game extends PApplet {
             textSize(25);
             text("SHIFT", boardSize / 2 + 20, boardSize / 2 - 20, 0);
             rotateX(-PI / 2);
-            // Cylinder Preview
-            if (archCheckBoard() && archCheckBall()) {
-                fill(80, 98, 112);
-                Arch arch = new Arch(mouseX - width / 2,  mouseY - width / 2, 0, currentRot, this);
-                arch.display(true);
-            } else {
-                fill(255, 0, 0);
-                Arch arch = new Arch(mouseX - width / 2, mouseY - width / 2, 0, currentRot, this);
-                arch.display(false);
-            }
+            // arch preview
+            preview.preview(archCheckBoard() && archCheckBall(), currentRot);
         } else {
             //normal view
             rotateY(rotateY);
