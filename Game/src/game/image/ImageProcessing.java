@@ -334,7 +334,7 @@ public class ImageProcessing extends PApplet {
         for (int idx = 0; idx < accumulatorNew.length; idx++) {
             if (accumulatorNew[idx] > minVotes) {
                 // first, compute back the (r, phi) polar coordinates:
-                int accPhi = (int) (idx / (rDim + 2)) - 1;
+                int accPhi = idx / (rDim + 2) - 1;
                 int accR = idx - (accPhi + 1) * (rDim + 2) - 1;
                 float r = (accR - (rDim - 1) * 0.5f) * discretizationStepsR;
                 float phi = accPhi * discretizationStepsPhi;

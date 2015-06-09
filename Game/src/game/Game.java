@@ -77,13 +77,19 @@ public class Game extends PApplet {
             ball.update(rotateX, rotateZ);
             ball.checkCylinderCollision();
         }
-        fill(131, 191, 17);
-        box(boardSize, boardHeight, boardSize);
+
         ball.display();
         fill(80, 98, 112);
         for (Arch arch : archs) {
             arch.display();
         }
+        if (rotateX > 0.2) {
+            fill(131, 191, 17, 120f);
+        } else {
+            fill(131, 191, 17);
+        }
+
+        box(boardSize, boardHeight, boardSize);
     }
 
     @Override

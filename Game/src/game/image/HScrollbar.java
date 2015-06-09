@@ -60,7 +60,7 @@ public class HScrollbar {
             newSliderPosition = constrain(parent.mouseX - barHeight / 2,
                     sliderPositionMin, sliderPositionMax);
         }
-        if (parent.abs(newSliderPosition - sliderPosition) > 1) {
+        if (PApplet.abs(newSliderPosition - sliderPosition) > 1) {
             sliderPosition = sliderPosition
                     + (newSliderPosition - sliderPosition);
         }
@@ -79,7 +79,7 @@ public class HScrollbar {
      * @return val clamped into the interval [minVal, maxVal]
      */
     float constrain(float val, float minVal, float maxVal) {
-        return parent.min(parent.max(val, minVal), maxVal);
+        return PApplet.min(PApplet.max(val, minVal), maxVal);
     }
 
     /**

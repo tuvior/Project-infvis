@@ -71,7 +71,7 @@ public class MovingBall {
 
                 n = new PVector(deltaX, deltaY);
                 n.normalize();
-                n.mult(arch.columnRadius + radius);
+                n.mult(Arch.columnRadius + radius);
 
 
                 location.x = arch.lColumn.x + n.x;
@@ -88,7 +88,7 @@ public class MovingBall {
 
                 n = new PVector(deltaX2, deltaY2);
                 n.normalize();
-                n.mult(arch.columnRadius + radius);
+                n.mult(Arch.columnRadius + radius);
 
 
                 location.x = arch.rColumn.x + n.x;
