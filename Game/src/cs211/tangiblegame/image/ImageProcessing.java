@@ -1,15 +1,15 @@
-package game.image;
+package cs211.tangiblegame.image;
 
-import game.TangibleGame;
+import cs211.tangiblegame.image.webcam.HoughComparator;
+import cs211.tangiblegame.image.webcam.QuadGraph;
+import cs211.tangiblegame.image.webcam.TwoDThreeD;
+import cs211.tangiblegame.TangibleGame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 
-import game.image.webcam.HoughComparator;
-import game.image.webcam.TwoDThreeD;
-import game.image.webcam.QuadGraph;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;

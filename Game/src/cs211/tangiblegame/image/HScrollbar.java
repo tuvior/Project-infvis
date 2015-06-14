@@ -1,4 +1,4 @@
-package game.image;
+package cs211.tangiblegame.image;
 
 import processing.core.PApplet;
 

@@ -1,7 +1,7 @@
-package game.data;
+package cs211.tangiblegame.data;
 
-import game.object.Arch;
-import game.TangibleGame;
+import cs211.tangiblegame.object.Arch;
+import cs211.tangiblegame.TangibleGame;
 import processing.core.*;
 
 

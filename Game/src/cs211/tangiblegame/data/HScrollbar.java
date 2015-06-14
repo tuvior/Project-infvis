@@ -1,6 +1,6 @@
-package game.data;
+package cs211.tangiblegame.data;
 
-import game.TangibleGame;
+import cs211.tangiblegame.TangibleGame;
 
 public class HScrollbar {
     float barWidth;  //Bar's width in pixels

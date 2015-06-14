@@ -1,4 +1,4 @@
-package game.image.webcam;
+package cs211.tangiblegame.image.webcam;
 
 import java.util.Collections;
 import java.util.Comparator;

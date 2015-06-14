@@ -1,9 +1,9 @@
-package game;
+package cs211.tangiblegame;
 
-import game.data.Data;
-import game.image.ImageProcessing;
-import game.object.Arch;
-import game.object.MovingBall;
+import cs211.tangiblegame.data.Data;
+import cs211.tangiblegame.image.ImageProcessing;
+import cs211.tangiblegame.object.Arch;
+import cs211.tangiblegame.object.MovingBall;
 import processing.core.*;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;

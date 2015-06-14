@@ -1,6 +1,6 @@
-package game.object;
+package cs211.tangiblegame.object;
 
-import game.TangibleGame;
+import cs211.tangiblegame.TangibleGame;
 import processing.core.*;
 
 public class Tree {

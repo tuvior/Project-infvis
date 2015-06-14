@@ -1,11 +1,11 @@
 
-package game.image.webcam;
+package cs211.tangiblegame.image.webcam;
 
 import java.util.List;
 import java.util.ArrayList;
 
 
-import game.image.ImageProcessing;
+import cs211.tangiblegame.image.ImageProcessing;
 import processing.core.PApplet;
 import processing.core.PVector;
 
