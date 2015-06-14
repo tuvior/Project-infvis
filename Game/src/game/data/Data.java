@@ -1,15 +1,13 @@
 package game.data;
 
 import game.object.Arch;
-import game.Game;
+import game.TangibleGame;
 import processing.core.*;
-
-import java.awt.*;
 
 
 public class Data{
 
-    private Game parent;
+    private TangibleGame parent;
     private PGraphics graphics;
     private int height;
     private Chart chart;
@@ -19,7 +17,7 @@ public class Data{
     public float score = 0;
     private float lastTopScore = 0;
 
-    public Data(int w, int h, Game parent){
+    public Data(int w, int h, TangibleGame parent){
         graphics = parent.createGraphics(w,h,PApplet.P2D);
         this.parent = parent;
         height = h;

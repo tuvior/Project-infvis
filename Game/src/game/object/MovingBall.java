@@ -1,12 +1,11 @@
 package game.object;
 
-import game.Game;
+import game.TangibleGame;
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PVector;
 
 public class MovingBall {
-    private Game parent;
+    private TangibleGame parent;
     public PVector location;
     public PVector velocity;
     public final static float radius = 15;
@@ -21,7 +20,7 @@ public class MovingBall {
 
     private boolean sameScore = false;
 
-    public MovingBall(Game parent) {
+    public MovingBall(TangibleGame parent) {
         location = new PVector(0, -17.5f, 0);
         velocity = new PVector(0, 0, 0);
         this.parent = parent;

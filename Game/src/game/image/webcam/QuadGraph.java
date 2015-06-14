@@ -317,18 +317,7 @@ public class QuadGraph extends PApplet {
 
         float area = Math.abs(0.5f * (i1 + i2 + i3 + i4));
 
-        System.out.println(area);
-
-        boolean valid = (area < max_area && area > min_area);
-
-        if (!valid) {
-            System.out.println("Area out of range");
-            System.out.println(area + "  AREA");
-        } else {
-            System.out.println("Valid");
-        }
-
-        return valid;
+        return (area < max_area && area > min_area);
     }
 
     /**

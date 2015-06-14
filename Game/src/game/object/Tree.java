@@ -1,18 +1,16 @@
 package game.object;
 
-import game.Game;
+import game.TangibleGame;
 import processing.core.*;
-
-import java.awt.*;
 
 public class Tree {
     public final static float radius = 10;
     PShape tree;
     float rotX = 0;
     public PVector location;
-    Game parent;
+    TangibleGame parent;
 
-    public Tree(float posX, float posY, Game parent) {
+    public Tree(float posX, float posY, TangibleGame parent) {
         location = new PVector(posX, posY);
         this.parent = parent;
         tree = parent.loadShape("simpleTree.obj");

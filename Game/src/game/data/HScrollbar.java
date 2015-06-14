@@ -1,7 +1,6 @@
 package game.data;
 
-import game.Game;
-import processing.core.PApplet;
+import game.TangibleGame;
 
 public class HScrollbar {
     float barWidth;  //Bar's width in pixels
@@ -15,7 +14,7 @@ public class HScrollbar {
     public boolean mouseOver;  //Is the mouse over the slider?
     public boolean locked;     //Is the mouse clicking and dragging the slider now?
 
-    Game parent;
+    TangibleGame parent;
 
     /**
      * @brief Creates a new horizontal scrollbar
@@ -25,7 +24,7 @@ public class HScrollbar {
      * @param w The width of the bar in pixels
      * @param h The height of the bar in pixels
      */
-    public HScrollbar (float x, float y, float w, float h, Game parent) {
+    public HScrollbar (float x, float y, float w, float h, TangibleGame parent) {
         barWidth = w;
         barHeight = h;
         xPosition = x;

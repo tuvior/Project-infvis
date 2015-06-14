@@ -1,6 +1,6 @@
 package game.image;
 
-import game.Game;
+import game.TangibleGame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,17 +23,17 @@ public class ImageProcessing {
     QuadGraph QG;
     PImage houghImg;
     public static TwoDThreeD twoDThreeD;
-    Game game;
+    TangibleGame tangibleGame;
     Boolean toInit = true;
 
 
-    public ImageProcessing(Game game) {
-        this.game = game;
+    public ImageProcessing(TangibleGame tangibleGame) {
+        this.tangibleGame = tangibleGame;
     }
 
     public void init() {
-        String video = game.sketchPath("data/testvideo.mp4");
-        videoFile = new Movie(game, video);
+        String video = tangibleGame.sketchPath("data/testvideo.mp4");
+        videoFile = new Movie(tangibleGame, video);
         videoFile.loop();
 
         QG = new QuadGraph(this);
@@ -67,24 +67,24 @@ public class ImageProcessing {
         }
 
         img.resize(150, 100);
-        game.image(img, -game.width / 2 + 20, -game.height / 2 + 100);
+        tangibleGame.image(img, -tangibleGame.width / 2 + 20, -tangibleGame.height / 2 + 100);
         hbsInter.resize(150, 100);
-        game.image(hbsInter, -game.width / 2 + 200, -game.height / 2 + 100);
+        tangibleGame.image(hbsInter, -tangibleGame.width / 2 + 200, -tangibleGame.height / 2 + 100);
 
         return temp;
     }
 
 
     private PImage thresholdBinary(float threshold, PImage img) {
-        PImage result = game.createImage(game.width, game.height, PConstants.RGB);
+        PImage result = tangibleGame.createImage(tangibleGame.width, tangibleGame.height, PConstants.RGB);
 
         for (int i = 0; i < img.width; i++) {
             for (int j = 0; j < img.height; j++) {
 
-                if (game.brightness(img.get(i, j)) > threshold) {
-                    result.set(i, j, game.color(255));
+                if (tangibleGame.brightness(img.get(i, j)) > threshold) {
+                    result.set(i, j, tangibleGame.color(255));
                 } else {
-                    result.set(i, j, game.color(0));
+                    result.set(i, j, tangibleGame.color(0));
                 }
             }
         }
@@ -94,19 +94,19 @@ public class ImageProcessing {
 
     private PImage hsbThreshold(PImage img, float hueMin, float hueMax, float bMin, float bMax, float sMin) {
 
-        PImage result = game.createImage(img.width, img.height, PConstants.RGB);
+        PImage result = tangibleGame.createImage(img.width, img.height, PConstants.RGB);
 
         for (int i = 0; i < img.width; i++) {
             for (int j = 0; j < img.height; j++) {
 
-                float h = game.hue(img.get(i, j));
-                float b = game.brightness(img.get(i, j));
-                float s = game.saturation(img.get(i, j));
+                float h = tangibleGame.hue(img.get(i, j));
+                float b = tangibleGame.brightness(img.get(i, j));
+                float s = tangibleGame.saturation(img.get(i, j));
 
                 if (h > hueMin && h < hueMax && b > bMin && b < bMax && s > sMin) {
-                    result.set(i, j, game.color(255));
+                    result.set(i, j, tangibleGame.color(255));
                 } else {
-                    result.set(i, j, game.color(0));
+                    result.set(i, j, tangibleGame.color(0));
                 }
             }
         }
@@ -123,7 +123,7 @@ public class ImageProcessing {
 
         float weight = 99.0f;//for blur
 
-        PImage result = game.createImage(img.width, img.height, PConstants.RGB);
+        PImage result = tangibleGame.createImage(img.width, img.height, PConstants.RGB);
 
         for (int i = 1; i < img.width - 1; i++) {
             for (int j = 1; j < img.height - 1; j++) {
@@ -132,7 +132,7 @@ public class ImageProcessing {
                 for (int x = i - 1; x < i + 1; x++) {
                     for (int y = j - 1; y < j + 1; y++) {
 
-                        intensities += game.brightness(img.get(x, y)) * kernel[x - i + 1][y - j + 1];
+                        intensities += tangibleGame.brightness(img.get(x, y)) * kernel[x - i + 1][y - j + 1];
                     }
                 }
 
@@ -156,11 +156,11 @@ public class ImageProcessing {
                 {0, 0, 0}};
 
 
-        PImage result = game.createImage(img.width, img.height, PConstants.ALPHA);
+        PImage result = tangibleGame.createImage(img.width, img.height, PConstants.ALPHA);
 
         // clear the image
         for (int i = 0; i < img.width * img.height; i++) {
-            result.pixels[i] = game.color(0);
+            result.pixels[i] = tangibleGame.color(0);
         }
 
         float max = 0;
@@ -194,9 +194,9 @@ public class ImageProcessing {
             for (int x = 2; x < img.width - 2; x++) { // Skip left and right
 
                 if (buffer[y * img.width + x] > (int) (max * 0.3f)) { // 30% of the max
-                    result.pixels[y * img.width + x] = game.color(255);
+                    result.pixels[y * img.width + x] = tangibleGame.color(255);
                 } else {
-                    result.pixels[y * img.width + x] = game.color(0);
+                    result.pixels[y * img.width + x] = tangibleGame.color(0);
                 }
             }
         }
@@ -245,7 +245,7 @@ public class ImageProcessing {
         for (int y = 0; y < edgeImg.height; y++) {
             for (int x = 0; x < edgeImg.width; x++) {
                 // Are we on an edge?
-                if (game.brightness(edgeImg.pixels[y * edgeImg.width + x]) != 0) {
+                if (tangibleGame.brightness(edgeImg.pixels[y * edgeImg.width + x]) != 0) {
 
                     float phi = 0;
                     for (int i = 0; i < phiDim; i++, phi += discretizationStepsPhi) {
@@ -266,10 +266,10 @@ public class ImageProcessing {
 
 //		PRINT THE HOUGH ACCUMULATOR
 
-        houghImg = game.createImage(rDim + 2, phiDim + 2, PConstants.ALPHA);
+        houghImg = tangibleGame.createImage(rDim + 2, phiDim + 2, PConstants.ALPHA);
 
         for (int i = 0; i < accumulator.length; i++) {
-            houghImg.pixels[i] = game.color(PApplet.min(255, accumulator[i]));
+            houghImg.pixels[i] = tangibleGame.color(PApplet.min(255, accumulator[i]));
         }
 
         houghImg.updatePixels();
@@ -367,22 +367,22 @@ public class ImageProcessing {
             int x3 = (int) (-(y3 - r / PApplet.sin(phi)) * (PApplet.sin(phi) / PApplet.cos(phi)));
 
             // Finally, plot the lines
-            game.stroke(204, 102, 0);
+            tangibleGame.stroke(204, 102, 0);
             if (y0 > 0) {
                 if (x1 > 0)
-                    game.line(x0, y0, x1, y1);
+                    tangibleGame.line(x0, y0, x1, y1);
                 else if (y2 > 0)
-                    game.line(x0, y0, x2, y2);
+                    tangibleGame.line(x0, y0, x2, y2);
                 else
-                    game.line(x0, y0, x3, y3);
+                    tangibleGame.line(x0, y0, x3, y3);
             } else {
                 if (x1 > 0) {
                     if (y2 > 0)
-                        game.line(x1, y1, x2, y2);
+                        tangibleGame.line(x1, y1, x2, y2);
                     else
-                        game.line(x1, y1, x3, y3);
+                        tangibleGame.line(x1, y1, x3, y3);
                 } else
-                    game.line(x2, y2, x3, y3);
+                    tangibleGame.line(x2, y2, x3, y3);
             }
         }
     }
@@ -408,12 +408,12 @@ public class ImageProcessing {
                 float y = ((-1 * r2 * PApplet.cos(phi1)) + (r1 * PApplet.cos(phi2))) / d;
 
                 PVector pv = new PVector(x, y);
-                if ((x >= 0 && x <= game.width) && (y >= 0 && y <= game.height)) {
+                if ((x >= 0 && x <= tangibleGame.width) && (y >= 0 && y <= tangibleGame.height)) {
                     intersections.add(pv);
                 }
                 // draw the intersection
-                game.fill(255, 128, 0);
-                game.ellipse(x, y, 10, 10);
+                tangibleGame.fill(255, 128, 0);
+                tangibleGame.ellipse(x, y, 10, 10);
             }
         }
 

@@ -1,13 +1,13 @@
 package game.object;
 
-import game.Game;
+import game.TangibleGame;
 import processing.core.*;
 
 public class Arch {
     public static PShape archPreview;
     public static PShape arch;
     public PVector location;
-    private Game parent;
+    private TangibleGame parent;
 
     public final static float columnCenter = 36;
     public final static float columnBoard = 40;
@@ -23,7 +23,7 @@ public class Arch {
     public float rotation;
 
 
-    public Arch(float posX, float posY, int id, float rotation,  Game parent) {
+    public Arch(float posX, float posY, int id, float rotation,  TangibleGame parent) {
         location = new PVector(posX , posY );
         this.parent = parent;
         this.archId = id;

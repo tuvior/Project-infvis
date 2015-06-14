@@ -1,6 +1,6 @@
 package game.data;
 
-import game.Game;
+import game.TangibleGame;
 import processing.core.*;
 
 import java.util.LinkedList;
@@ -9,10 +9,10 @@ public class Chart {
 
     private PGraphics graphics;
     private int height;
-    private Game parent;
+    private TangibleGame parent;
     private LinkedList<Float> scores;
 
-    public Chart (int w, int h, Game parent) {
+    public Chart (int w, int h, TangibleGame parent) {
         graphics = parent.createGraphics(w,h, PApplet.P2D);
         this.parent = parent;
         height = h;

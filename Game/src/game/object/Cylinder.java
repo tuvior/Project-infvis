@@ -1,17 +1,17 @@
 package game.object;
 
-import game.Game;
+import game.TangibleGame;
 import processing.core.*;
 
 public class Cylinder {
-    protected Game parent;
+    protected TangibleGame parent;
     public final static float radius = 30;
     private static final float cylinderHeight = 55;
     private static final int cylinderResolution = 40;
     public PVector location;
     PShape cylinder = new PShape();
 
-    public Cylinder(float posX, float posY, Game parent) {
+    public Cylinder(float posX, float posY, TangibleGame parent) {
         location = new PVector(posX, posY);
         this.parent = parent;
         float angle;
