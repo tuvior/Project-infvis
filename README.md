@@ -1,4 +1,4 @@
 #Project - Visual Computing 2015
 ___________________________________
-_ImageProcessing_ and _Webcam_ contain code for milestone 3
+_The code for Milestone 4 is contain on the 'TangibleGame' folder.
 _____________
