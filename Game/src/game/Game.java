@@ -1,6 +1,7 @@
 package game;
 
 import game.data.Data;
+import game.image.ImageProcessing;
 import game.object.Arch;
 import game.object.MovingBall;
 import processing.core.*;
@@ -34,8 +35,10 @@ public class Game extends PApplet {
     public int archNbr = 0;
     public int lastArchId = 0;
 
+    private ImageProcessing ip;
     private Arch preview;
 
+    @Override
     public void setup() {
         size(800, 800, P3D);
         ball = new MovingBall(this);
@@ -51,8 +54,12 @@ public class Game extends PApplet {
         Arch.archPreview.setFill(color(255,0,0));
         Arch.arch = loadShape("data/arco_texture_buone.obj");
         preview = new Arch(0, 0, 0, 0, this);
+
+        ip = new ImageProcessing(this);
+        ip.init();
     }
 
+    @Override
     public void draw() {
         background(9, 162, 155);
         lights();
@@ -69,8 +76,14 @@ public class Game extends PApplet {
             // arch preview
             preview.preview(archCheckBoard() && archCheckBall(), currentRot);
         } else {
+            PVector rot = ip.drawAndCompute();
+
+            if(rot.x != 0 && rot.y!= 0 && rot.z != 0){
+                rotateX = rot.x;
+                rotateZ = rot.y;
+            }
             //normal view
-            rotateY(rotateY);
+            //rotateY(rotateY);
             rotateZ(rotateZ);
             rotateX(rotateX);
             ball.checkEdges(boardSize / 2, boardSize / 2);
@@ -83,7 +96,7 @@ public class Game extends PApplet {
         for (Arch arch : archs) {
             arch.display();
         }
-        if (rotateX > 0.2) {
+        if (rotateX > 0.05) {
             fill(131, 191, 17, 120f);
         } else {
             fill(131, 191, 17);
@@ -106,6 +119,7 @@ public class Game extends PApplet {
         }
     }
 
+    @Override
     public void mouseDragged() {
         //don't rotate if in birdview
         if (birdView) return;
@@ -137,6 +151,7 @@ public class Game extends PApplet {
         prevMouseX = mouseX;
     }
 
+    @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         float w = e.getWheelRotation();
         if (birdView) {
@@ -173,6 +188,7 @@ public class Game extends PApplet {
         }
     }
 
+    @Override
     public void keyPressed() {
         if (key == CODED) {
             if (keyCode == LEFT) {
@@ -195,10 +211,10 @@ public class Game extends PApplet {
         PVector location1 = new PVector(mouse.x + Arch.columnBoard, -22.5f, mouse.z + Arch.columnHeight);
         PVector location2 = new PVector(mouse.x - Arch.columnBoard, -22.5f, mouse.z - Arch.columnHeight);
 
-        boolean un = location1.dist(ball.location) > Arch.archWidth / 2;
-        boolean deux = location2.dist(ball.location) > Arch.archWidth / 2;
+        boolean right = location1.dist(ball.location) > Arch.archWidth / 2;
+        boolean left = location2.dist(ball.location) > Arch.archWidth / 2;
 
-        return (un && deux);
+        return (right && left);
     }
 
     static public void main(String[] args) {

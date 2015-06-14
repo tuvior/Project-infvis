@@ -3,9 +3,9 @@ package game.image.webcam;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 
 
+import game.image.ImageProcessing;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -13,21 +13,25 @@ import processing.core.PVector;
 public class QuadGraph extends PApplet {
 
 
-    HoughTransform parent;
+    ImageProcessing parent;
 
 
     private static final long serialVersionUID = 1L;
-    List<int[]> cycles = new ArrayList<int[]>();
+    List<int[]> cycles = new ArrayList<>();
     int[][] graph;
 
 
-    public QuadGraph(HoughTransform parent) {
+    public QuadGraph(ImageProcessing parent) {
         this.parent = parent;
     }
 
 
-    public void build(List<PVector> lines, int width, int height) {
+    public ArrayList<ArrayList<PVector>> build(List<PVector> lines, int width, int height) {
 
+        ArrayList<PVector> candidateLines = new ArrayList<>();
+        ArrayList<PVector> candidateCorners = new ArrayList<>();
+
+        int candidateLinesIndex = 0;
         int n = lines.size();
 
         // The maximum possible number of edges is sum(0..n) = n * (n + 1)/2
@@ -37,23 +41,15 @@ public class QuadGraph extends PApplet {
         for (int i = 0; i < lines.size(); i++) {
             for (int j = i + 1; j < lines.size(); j++) {
                 if (intersect(lines.get(i), lines.get(j), width, height)) {
-
-                    // TODO
-                    // fill the graph using intersect() to check if two lines are
-                    // connected in the graph
-
                     graph[idx][0] = i;
                     graph[idx][1] = j;
-
 
                     idx++;
                 }
             }
         }
-
-        System.out.println(findCycles().size());
-
         for (int[] quad : findCycles()) {
+
             PVector l1 = lines.get(quad[0]);
             PVector l2 = lines.get(quad[1]);
             PVector l3 = lines.get(quad[2]);
@@ -69,17 +65,30 @@ public class QuadGraph extends PApplet {
             PVector c41 = intersection(l4, l1);
 
 
-            if (isConvex(c12, c23, c34, c41) && validArea(c12, c23, c34, c41, parent.img.width * parent.img.width, 5000) && nonFlatQuad(c12, c23, c34, c41)) {
-                // Choose a random, semi-transparent colour
-                Random random = new Random();
+            if (isConvex(c12, c23, c34, c41) && validArea(c12, c23, c34, c41, parent.img.width * parent.img.width, 500) && nonFlatQuad(c12, c23, c34, c41)) {
+                if (candidateLinesIndex == 0) {
+                    //Take valid lines into account
+                    candidateCorners.add(c12);
+                    candidateCorners.add(c23);
+                    candidateCorners.add(c34);
+                    candidateCorners.add(c41);
 
-                parent.fill(color(min(255, random.nextInt(300)),
-                        min(255, random.nextInt(300)),
-                        min(255, random.nextInt(300))), 50);
+                    candidateLines.add(l1);
+                    candidateLines.add(l2);
+                    candidateLines.add(l3);
+                    candidateLines.add(l4);
 
-                parent.quad(c12.x, c12.y, c23.x, c23.y, c34.x, c34.y, c41.x, c41.y);
+                    candidateLinesIndex++;
+                }
             }
         }
+
+
+        ArrayList<ArrayList<PVector>> aa = new ArrayList<>();
+
+        aa.add(candidateCorners);
+
+        return aa;
 
     }
 
@@ -116,27 +125,17 @@ public class QuadGraph extends PApplet {
         int x = (int) ((r2 * sin_t1 - r1 * sin_t2) / denom);
         int y = (int) ((-r2 * cos_t1 + r1 * cos_t2) / denom);
 
-        if (0 <= x && 0 <= y && width >= x && height >= y)
-            return true;
-        else
-            return false;
+        return 0 <= x && 0 <= y && width >= x && height >= y;
 
     }
 
     List<int[]> findCycles() {
 
         cycles.clear();
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph[i].length; j++) {
-                findNewCycles(new int[]{graph[i][j]});
+        for (int[] aGraph : graph) {
+            for (int anAGraph : aGraph) {
+                findNewCycles(new int[]{anAGraph});
             }
-        }
-        for (int[] cy : cycles) {
-            String s = "" + cy[0];
-            for (int i = 1; i < cy.length; i++) {
-                s += "," + cy[i];
-            }
-            //   System.out.println(s);
         }
         return cycles;
     }
@@ -146,13 +145,13 @@ public class QuadGraph extends PApplet {
         int x;
         int[] sub = new int[path.length + 1];
 
-        for (int i = 0; i < graph.length; i++)
+        for (int[] aGraph : graph)
             for (int y = 0; y <= 1; y++)
-                if (graph[i][y] == n)
+                if (aGraph[y] == n)
                 //  edge refers to our current node
                 {
 
-                    x = graph[i][(y + 1) % 2];
+                    x = aGraph[(y + 1) % 2];
                     if (!visited(x, path))
                     //  neighbor node not on path yet
                     {
@@ -266,9 +265,20 @@ public class QuadGraph extends PApplet {
      * See http://debian.fmi.uni-sofia.bg/~sergei/cgsr/docs/clockwise.htm
      * for justification.
      *
-     * @param c1
      */
     public static boolean isConvex(PVector c1, PVector c2, PVector c3, PVector c4) {
+
+        List<PVector> ll = new ArrayList<>();
+        ll.add(c1);
+        ll.add(c2);
+        ll.add(c3);
+        ll.add(c4);
+        List<PVector> corners = TwoDThreeD.sortCorners(ll);
+
+        c1 = corners.get(0);
+        c2 = corners.get(1);
+        c3 = corners.get(2);
+        c4 = corners.get(3);
 
         PVector v21 = PVector.sub(c1, c2);
         PVector v32 = PVector.sub(c2, c3);
@@ -285,6 +295,7 @@ public class QuadGraph extends PApplet {
             return true;
         else
             System.out.println("Eliminating non-convex quad");
+        System.out.println(c1 + "  " + c2 + "   " + c3 + "   " + c4);
         return false;
 
     }
@@ -310,8 +321,10 @@ public class QuadGraph extends PApplet {
 
         boolean valid = (area < max_area && area > min_area);
 
-        if (!valid) System.out.println("Area out of range");
-        else {
+        if (!valid) {
+            System.out.println("Area out of range");
+            System.out.println(area + "  AREA");
+        } else {
             System.out.println("Valid");
         }
 
@@ -324,8 +337,7 @@ public class QuadGraph extends PApplet {
      */
     public static boolean nonFlatQuad(PVector c1, PVector c2, PVector c3, PVector c4) {
 
-        // cos(70deg) ~= 0.3
-        float min_cos = 0.5f;
+        float min_cos = 0.8f;
 
         PVector v21 = PVector.sub(c1, c2);
         PVector v32 = PVector.sub(c2, c3);
@@ -337,10 +349,11 @@ public class QuadGraph extends PApplet {
         float cos3 = Math.abs(v43.dot(v14) / (v43.mag() * v14.mag()));
         float cos4 = Math.abs(v14.dot(v21) / (v14.mag() * v21.mag()));
 
+
         if (cos1 < min_cos && cos2 < min_cos && cos3 < min_cos && cos4 < min_cos)
             return true;
         else {
-            System.out.println("Flat quad");
+            System.out.println("Flat quad  :" + cos1 + "  " + cos2 + "   " + cos3 + "  " + cos4);
             return false;
         }
     }

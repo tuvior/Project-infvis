@@ -48,7 +48,6 @@ public class Data{
         int previewSize = height - 10;
         graphics.rect(5, 5, previewSize, previewSize);
         graphics.fill(12,119,136);
-        new Color(9, 162, 155);
         float ballx = parent.ball.location.x / (parent.boardSize / previewSize);
         float bally = parent.ball.location.z / (parent.boardSize / previewSize);
         graphics.ellipse(ballx + previewSize/2 + 5, bally + previewSize/2 + 5, previewSize/10, previewSize/10);

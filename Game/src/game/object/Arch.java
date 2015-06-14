@@ -68,5 +68,19 @@ public class Arch {
         parent.popMatrix();
     }
 
+    public boolean isBetweenCols(float x, float y) {
+        float cross = (y - lColumn.y) * (rColumn.x - lColumn.x) -  (x - lColumn.x) * (rColumn.y - lColumn.y);
+
+        if (PApplet.abs(cross) > 200) return false;
+
+        float dot = (x - lColumn.x) * (rColumn.x - lColumn.x) + (y - lColumn.y) * (rColumn.y - lColumn.y);
+        if (dot < 0) return false;
+
+        float squarel = (rColumn.x - lColumn.x) * (rColumn.x - lColumn.x) + (rColumn.y - lColumn.y) * (rColumn.y - lColumn.y);
+        if (dot > squarel) return false;
+
+        return true;
+    }
+
 
 }

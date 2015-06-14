@@ -17,17 +17,13 @@ public class HScrollbar {
 
     // Is the mouse over the slider?
     // Is the mouse clicking and dragging the slider now?
+
     /**
+     * @param x The x position of the top left corner of the bar in pixels
+     * @param y The y position of the top left corner of the bar in pixels
+     * @param w The width of the bar in pixels
+     * @param h The height of the bar in pixels
      * @brief Creates a new horizontal scrollbar
-     *
-     * @param x
-     *            The x position of the top left corner of the bar in pixels
-     * @param y
-     *            The y position of the top left corner of the bar in pixels
-     * @param w
-     *            The width of the bar in pixels
-     * @param h
-     *            The height of the bar in pixels
      */
     HScrollbar(PApplet p, float x, float y, float w, float h) {
         parent = p;
@@ -45,11 +41,7 @@ public class HScrollbar {
      * @brief Updates the state of the scrollbar according to the mouse movement
      */
     void update() {
-        if (isMouseOver()) {
-            mouseOver = true;
-        } else {
-            mouseOver = false;
-        }
+        mouseOver = isMouseOver();
         if (parent.mousePressed && mouseOver) {
             locked = true;
         }
@@ -67,25 +59,19 @@ public class HScrollbar {
     }
 
     /**
-     * @brief Clamps the value into the interval
-     *
-     * @param val
-     *            The value to be clamped
-     * @param minVal
-     *            Smallest value possible
-     * @param maxVal
-     *            Largest value possible
-     *
+     * @param val    The value to be clamped
+     * @param minVal Smallest value possible
+     * @param maxVal Largest value possible
      * @return val clamped into the interval [minVal, maxVal]
+     * @brief Clamps the value into the interval
      */
     float constrain(float val, float minVal, float maxVal) {
         return PApplet.min(PApplet.max(val, minVal), maxVal);
     }
 
     /**
-     * @brief Gets whether the mouse is hovering the scrollbar
-     *
      * @return Whether the mouse is hovering the scrollbar
+     * @brief Gets whether the mouse is hovering the scrollbar
      */
     boolean isMouseOver() {
         if (parent.mouseX > xPosition && parent.mouseX < xPosition + barWidth
@@ -112,10 +98,9 @@ public class HScrollbar {
     }
 
     /**
-     * @brief Gets the slider position
-     *
      * @return The slider position in the interval [0,1] corresponding to
-     *         [leftmost position, rightmost position]
+     * [leftmost position, rightmost position]
+     * @brief Gets the slider position
      */
     float getPos() {
         return (sliderPosition - xPosition) / (barWidth - barHeight);

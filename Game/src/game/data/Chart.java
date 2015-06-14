@@ -16,7 +16,7 @@ public class Chart {
         graphics = parent.createGraphics(w,h, PApplet.P2D);
         this.parent = parent;
         height = h;
-        scores = new LinkedList<Float>();
+        scores = new LinkedList<>();
     }
 
     public void draw(int x, int y, float compression){
@@ -34,7 +34,7 @@ public class Chart {
     }
 
     public void drawColumn(float score, float x, float compression){
-        int numRectangles = (int)score/ 3;
+        int numRectangles = (int)score/ 5;
         for (int i = 0; i < numRectangles; i++) {
             graphics.rect(x, height - i*6 - 5, 5*compression, 5);
         }
